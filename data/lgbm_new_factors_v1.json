@@ -1,0 +1,1181 @@
+{
+  "generated_at": "2026-08-28T22:19:07.261858+08:00",
+  "status": "candidate_passed_not_deployed",
+  "objective": "improve annual return, Sharpe and drawdown with unchanged execution",
+  "feature_batch_names": [
+    "alpha158_baseline",
+    "alpha158_plus_alpha101",
+    "alpha158_plus_qlib_multiscale",
+    "alpha158_plus_barra",
+    "alpha158_plus_all_new"
+  ],
+  "feature_counts": {
+    "alpha158_baseline": 85,
+    "alpha158_plus_alpha101": 97,
+    "alpha158_plus_qlib_multiscale": 99,
+    "alpha158_plus_barra": 100,
+    "alpha158_plus_all_new": 126
+  },
+  "model_contract": {
+    "model": "deterministic LightGBM LambdaRank",
+    "model_config": {
+      "baseline_weight": 0.4,
+      "num_leaves": 7,
+      "max_depth": 3,
+      "min_child_samples": 300,
+      "n_estimators": 120,
+      "feature_fraction": 0.7
+    },
+    "selection_freeze_date": "2018-01-01",
+    "selection_window": [
+      "2018-01-01",
+      "2019-12-31"
+    ],
+    "diagnostic_freeze_date": "2020-01-02",
+    "diagnostic_window": [
+      "2020-01-01",
+      "2026-08-25"
+    ],
+    "execution": "signal close; next-open; Top5; 10-session rebalance; 12bp one-way cost"
+  },
+  "selection_candidates": [
+    {
+      "name": "alpha158_baseline",
+      "feature_count": 85,
+      "selection": {
+        "performance": {
+          "total_return": 0.20810343564377742,
+          "benchmark_return": 0.09629242791971993,
+          "excess_return": 0.1118110077240575,
+          "annual_return": 0.1029923653051934,
+          "max_drawdown": -0.3348511048235302,
+          "sharpe": 0.5525650420994549,
+          "information_ratio": 0.47734050734549766,
+          "return_periods": 486,
+          "first_period_end": "2018-01-03",
+          "last_period_end": "2019-12-31"
+        },
+        "activity": {
+          "total_turnover": 21.44717935659099,
+          "annual_turnover": 10.7601942392166,
+          "rebalance_count": 49,
+          "average_event_turnover": 0.437697537889612,
+          "total_cost_return_units": 0.02573661522790918
+        }
+      },
+      "causality_audit": {
+        "freeze_date": "2018-01-01",
+        "feature_count": 85,
+        "training_rows": 10128,
+        "training_dates": 299,
+        "max_training_label_end_date": "2017-12-29",
+        "strictly_mature": true,
+        "prediction_rows": 91950,
+        "top_feature_importance": [
+          {
+            "feature": "x_pb",
+            "gain": 875.8292865753174
+          },
+          {
+            "feature": "x_volatility_10",
+            "gain": 647.0474636554718
+          },
+          {
+            "feature": "x_return_120",
+            "gain": 578.8514151573181
+          },
+          {
+            "feature": "x_efficiency_120",
+            "gain": 571.2412209510803
+          },
+          {
+            "feature": "x_low_position_120",
+            "gain": 319.37156081199646
+          },
+          {
+            "feature": "x_price_amount_corr_40",
+            "gain": 274.68409180641174
+          },
+          {
+            "feature": "x_volatility_40",
+            "gain": 229.86920070648193
+          },
+          {
+            "feature": "x_volatility_60",
+            "gain": 229.68204045295715
+          },
+          {
+            "feature": "x_turnover_ratio_120",
+            "gain": 227.63283896446228
+          },
+          {
+            "feature": "x_max_return_10",
+            "gain": 208.52250051498413
+          },
+          {
+            "feature": "x_min_return_20",
+            "gain": 207.66843056678772
+          },
+          {
+            "feature": "x_volatility_120",
+            "gain": 164.28781008720398
+          },
+          {
+            "feature": "x_efficiency_40",
+            "gain": 141.50398933887482
+          },
+          {
+            "feature": "x_downside_vol_120",
+            "gain": 106.63250994682312
+          },
+          {
+            "feature": "x_high_position_40",
+            "gain": 106.44599843025208
+          },
+          {
+            "feature": "x_max_return_40",
+            "gain": 92.76339840888977
+          },
+          {
+            "feature": "x_min_return_120",
+            "gain": 87.07593011856079
+          },
+          {
+            "feature": "x_ma_ratio_20",
+            "gain": 74.59994006156921
+          },
+          {
+            "feature": "x_max_return_60",
+            "gain": 65.53099012374878
+          },
+          {
+            "feature": "x_pe",
+            "gain": 63.55573081970215
+          },
+          {
+            "feature": "x_ma_ratio_120",
+            "gain": 59.2843599319458
+          },
+          {
+            "feature": "x_price_amount_corr_20",
+            "gain": 56.84299945831299
+          },
+          {
+            "feature": "x_high_position_60",
+            "gain": 53.95385026931763
+          },
+          {
+            "feature": "x_efficiency_60",
+            "gain": 49.94741106033325
+          },
+          {
+            "feature": "x_downside_vol_20",
+            "gain": 46.4600305557251
+          }
+        ]
+      }
+    },
+    {
+      "name": "alpha158_plus_alpha101",
+      "feature_count": 97,
+      "selection": {
+        "performance": {
+          "total_return": 0.20582665835430114,
+          "benchmark_return": 0.09629242791971993,
+          "excess_return": 0.10953423043458121,
+          "annual_return": 0.10191403853699188,
+          "max_drawdown": -0.3169984835189209,
+          "sharpe": 0.5609836518787019,
+          "information_ratio": 0.4573603275483684,
+          "return_periods": 486,
+          "first_period_end": "2018-01-03",
+          "last_period_end": "2019-12-31"
+        },
+        "activity": {
+          "total_turnover": 21.367669941365968,
+          "annual_turnover": 10.72030383043868,
+          "rebalance_count": 49,
+          "average_event_turnover": 0.43607489676257083,
+          "total_cost_return_units": 0.025641203929639172
+        }
+      },
+      "causality_audit": {
+        "freeze_date": "2018-01-01",
+        "feature_count": 97,
+        "training_rows": 10128,
+        "training_dates": 299,
+        "max_training_label_end_date": "2017-12-29",
+        "strictly_mature": true,
+        "prediction_rows": 91950,
+        "top_feature_importance": [
+          {
+            "feature": "x_pb",
+            "gain": 1159.9970610141754
+          },
+          {
+            "feature": "x_return_120",
+            "gain": 642.6700239181519
+          },
+          {
+            "feature": "x_efficiency_120",
+            "gain": 459.09430085122585
+          },
+          {
+            "feature": "x_volatility_10",
+            "gain": 441.4172089099884
+          },
+          {
+            "feature": "x_low_position_120",
+            "gain": 435.81673550605774
+          },
+          {
+            "feature": "x_volatility_60",
+            "gain": 259.4693908691406
+          },
+          {
+            "feature": "x_max_return_10",
+            "gain": 232.484628200531
+          },
+          {
+            "feature": "x_turnover_ratio_120",
+            "gain": 222.25592184066772
+          },
+          {
+            "feature": "x_volatility_40",
+            "gain": 221.01807022094727
+          },
+          {
+            "feature": "x_price_amount_corr_40",
+            "gain": 208.46350979804993
+          },
+          {
+            "feature": "x_wq_alpha018",
+            "gain": 177.67553067207336
+          },
+          {
+            "feature": "x_max_return_40",
+            "gain": 162.17188024520874
+          },
+          {
+            "feature": "x_min_return_20",
+            "gain": 148.49817085266113
+          },
+          {
+            "feature": "x_volatility_120",
+            "gain": 132.66277384757996
+          },
+          {
+            "feature": "x_wq_alpha003",
+            "gain": 114.48235988616943
+          },
+          {
+            "feature": "x_downside_vol_120",
+            "gain": 111.39717841148376
+          },
+          {
+            "feature": "x_min_return_120",
+            "gain": 83.09652996063232
+          },
+          {
+            "feature": "x_high_position_40",
+            "gain": 72.93396043777466
+          },
+          {
+            "feature": "x_high_position_60",
+            "gain": 67.80699968338013
+          },
+          {
+            "feature": "x_efficiency_40",
+            "gain": 64.84420990943909
+          },
+          {
+            "feature": "x_return_40",
+            "gain": 63.06399965286255
+          },
+          {
+            "feature": "x_max_return_20",
+            "gain": 60.08055067062378
+          },
+          {
+            "feature": "x_max_return_120",
+            "gain": 57.50088953971863
+          },
+          {
+            "feature": "x_ma_ratio_20",
+            "gain": 50.137160301208496
+          },
+          {
+            "feature": "x_pe",
+            "gain": 49.0460205078125
+          }
+        ]
+      }
+    },
+    {
+      "name": "alpha158_plus_qlib_multiscale",
+      "feature_count": 99,
+      "selection": {
+        "performance": {
+          "total_return": 0.11060678073857155,
+          "benchmark_return": 0.09629242791971993,
+          "excess_return": 0.014314352818851628,
+          "annual_return": 0.05590262608524754,
+          "max_drawdown": -0.35493824302471244,
+          "sharpe": 0.35834410821146473,
+          "information_ratio": 0.07476606144084785,
+          "return_periods": 486,
+          "first_period_end": "2018-01-03",
+          "last_period_end": "2019-12-31"
+        },
+        "activity": {
+          "total_turnover": 21.456646674413854,
+          "annual_turnover": 10.764944056290663,
+          "rebalance_count": 49,
+          "average_event_turnover": 0.4378907484574254,
+          "total_cost_return_units": 0.02574797600929662
+        }
+      },
+      "causality_audit": {
+        "freeze_date": "2018-01-01",
+        "feature_count": 99,
+        "training_rows": 10128,
+        "training_dates": 299,
+        "max_training_label_end_date": "2017-12-29",
+        "strictly_mature": true,
+        "prediction_rows": 91950,
+        "top_feature_importance": [
+          {
+            "feature": "x_pb",
+            "gain": 1186.1806700229645
+          },
+          {
+            "feature": "x_return_120",
+            "gain": 587.253897190094
+          },
+          {
+            "feature": "x_volatility_10",
+            "gain": 491.7452926635742
+          },
+          {
+            "feature": "x_efficiency_120",
+            "gain": 346.7481441497803
+          },
+          {
+            "feature": "x_turnover_ratio_120",
+            "gain": 283.1330301761627
+          },
+          {
+            "feature": "x_low_position_120",
+            "gain": 275.1421546936035
+          },
+          {
+            "feature": "x_max_return_10",
+            "gain": 256.8509681224823
+          },
+          {
+            "feature": "x_money_flow_imbalance_60",
+            "gain": 254.73442888259888
+          },
+          {
+            "feature": "x_volatility_60",
+            "gain": 220.77820992469788
+          },
+          {
+            "feature": "x_min_return_20",
+            "gain": 209.7563498020172
+          },
+          {
+            "feature": "x_price_amount_corr_40",
+            "gain": 191.9240198135376
+          },
+          {
+            "feature": "x_efficiency_40",
+            "gain": 166.71267175674438
+          },
+          {
+            "feature": "x_downside_vol_120",
+            "gain": 139.24893045425415
+          },
+          {
+            "feature": "x_volatility_40",
+            "gain": 138.3096513748169
+          },
+          {
+            "feature": "x_vwap_gap_60",
+            "gain": 138.00854897499084
+          },
+          {
+            "feature": "x_beta_60",
+            "gain": 136.87896013259888
+          },
+          {
+            "feature": "x_max_return_60",
+            "gain": 130.29816818237305
+          },
+          {
+            "feature": "x_min_return_120",
+            "gain": 113.26175117492676
+          },
+          {
+            "feature": "x_vwap_gap_20",
+            "gain": 100.61953926086426
+          },
+          {
+            "feature": "x_max_return_40",
+            "gain": 90.04311084747314
+          },
+          {
+            "feature": "x_volatility_120",
+            "gain": 89.57039976119995
+          },
+          {
+            "feature": "x_max_return_120",
+            "gain": 79.10311079025269
+          },
+          {
+            "feature": "x_high_position_120",
+            "gain": 74.84410953521729
+          },
+          {
+            "feature": "x_high_position_40",
+            "gain": 59.05149984359741
+          },
+          {
+            "feature": "x_return_40",
+            "gain": 56.32476997375488
+          }
+        ]
+      }
+    },
+    {
+      "name": "alpha158_plus_barra",
+      "feature_count": 100,
+      "selection": {
+        "performance": {
+          "total_return": 0.2226091042770062,
+          "benchmark_return": 0.09629242791971993,
+          "excess_return": 0.12631667635728627,
+          "annual_return": 0.10983968562671587,
+          "max_drawdown": -0.2902630046072676,
+          "sharpe": 0.5962265792207753,
+          "information_ratio": 0.5449262610892178,
+          "return_periods": 486,
+          "first_period_end": "2018-01-03",
+          "last_period_end": "2019-12-31"
+        },
+        "activity": {
+          "total_turnover": 21.451694556201446,
+          "annual_turnover": 10.762459545251932,
+          "rebalance_count": 49,
+          "average_event_turnover": 0.43778968482043773,
+          "total_cost_return_units": 0.025742033467441736
+        }
+      },
+      "causality_audit": {
+        "freeze_date": "2018-01-01",
+        "feature_count": 100,
+        "training_rows": 10128,
+        "training_dates": 299,
+        "max_training_label_end_date": "2017-12-29",
+        "strictly_mature": true,
+        "prediction_rows": 91950,
+        "top_feature_importance": [
+          {
+            "feature": "x_pb",
+            "gain": 1192.8321113586426
+          },
+          {
+            "feature": "x_return_120",
+            "gain": 700.9974635839462
+          },
+          {
+            "feature": "x_volatility_10",
+            "gain": 415.44094944000244
+          },
+          {
+            "feature": "x_efficiency_120",
+            "gain": 350.77725315093994
+          },
+          {
+            "feature": "x_min_return_20",
+            "gain": 247.08970022201538
+          },
+          {
+            "feature": "x_market_corr_60",
+            "gain": 244.02174043655396
+          },
+          {
+            "feature": "x_max_return_10",
+            "gain": 227.7526285648346
+          },
+          {
+            "feature": "x_price_amount_corr_40",
+            "gain": 223.76683068275452
+          },
+          {
+            "feature": "x_turnover_ratio_120",
+            "gain": 220.10495924949646
+          },
+          {
+            "feature": "x_volatility_60",
+            "gain": 179.39956998825073
+          },
+          {
+            "feature": "x_market_up_beta_60",
+            "gain": 167.60909008979797
+          },
+          {
+            "feature": "x_max_return_120",
+            "gain": 126.13467133045197
+          },
+          {
+            "feature": "x_kyle_lambda_60",
+            "gain": 125.24312043190002
+          },
+          {
+            "feature": "x_downside_vol_120",
+            "gain": 123.82041001319885
+          },
+          {
+            "feature": "x_kyle_lambda_20",
+            "gain": 114.67055034637451
+          },
+          {
+            "feature": "x_low_position_120",
+            "gain": 109.96036958694458
+          },
+          {
+            "feature": "x_max_return_60",
+            "gain": 109.35233211517334
+          },
+          {
+            "feature": "x_efficiency_40",
+            "gain": 107.6458797454834
+          },
+          {
+            "feature": "x_volatility_40",
+            "gain": 93.1886305809021
+          },
+          {
+            "feature": "x_max_return_40",
+            "gain": 92.98986959457397
+          },
+          {
+            "feature": "x_residual_vol_60",
+            "gain": 86.9968090057373
+          },
+          {
+            "feature": "x_volatility_120",
+            "gain": 82.59210848808289
+          },
+          {
+            "feature": "x_max_return_20",
+            "gain": 73.10727071762085
+          },
+          {
+            "feature": "x_high_position_40",
+            "gain": 70.21050953865051
+          },
+          {
+            "feature": "x_price_amount_corr_20",
+            "gain": 66.28483033180237
+          }
+        ]
+      }
+    },
+    {
+      "name": "alpha158_plus_all_new",
+      "feature_count": 126,
+      "selection": {
+        "performance": {
+          "total_return": 0.22745905237317454,
+          "benchmark_return": 0.09629242791971993,
+          "excess_return": 0.13116662445345462,
+          "annual_return": 0.11212034198993348,
+          "max_drawdown": -0.3133668051789621,
+          "sharpe": 0.5923777750447117,
+          "information_ratio": 0.5892787641659264,
+          "return_periods": 486,
+          "first_period_end": "2018-01-03",
+          "last_period_end": "2019-12-31"
+        },
+        "activity": {
+          "total_turnover": 21.366846970279784,
+          "annual_turnover": 10.719890940305515,
+          "rebalance_count": 49,
+          "average_event_turnover": 0.43605810143428136,
+          "total_cost_return_units": 0.025640216364335746
+        }
+      },
+      "causality_audit": {
+        "freeze_date": "2018-01-01",
+        "feature_count": 126,
+        "training_rows": 10128,
+        "training_dates": 299,
+        "max_training_label_end_date": "2017-12-29",
+        "strictly_mature": true,
+        "prediction_rows": 91950,
+        "top_feature_importance": [
+          {
+            "feature": "x_pb",
+            "gain": 1195.2004613876343
+          },
+          {
+            "feature": "x_volatility_10",
+            "gain": 522.2659962177277
+          },
+          {
+            "feature": "x_market_corr_60",
+            "gain": 322.3969588279724
+          },
+          {
+            "feature": "x_return_120",
+            "gain": 305.8020393848419
+          },
+          {
+            "feature": "x_min_return_20",
+            "gain": 252.86298894882202
+          },
+          {
+            "feature": "x_efficiency_120",
+            "gain": 238.05704021453857
+          },
+          {
+            "feature": "x_money_flow_imbalance_60",
+            "gain": 231.43077087402344
+          },
+          {
+            "feature": "x_wq_alpha018",
+            "gain": 229.3270936012268
+          },
+          {
+            "feature": "x_market_up_beta_60",
+            "gain": 218.78917121887207
+          },
+          {
+            "feature": "x_max_return_10",
+            "gain": 186.3204915523529
+          },
+          {
+            "feature": "x_price_amount_corr_40",
+            "gain": 170.09172892570496
+          },
+          {
+            "feature": "x_volatility_60",
+            "gain": 169.5738501548767
+          },
+          {
+            "feature": "x_kyle_lambda_60",
+            "gain": 169.14516019821167
+          },
+          {
+            "feature": "x_volatility_40",
+            "gain": 144.29326009750366
+          },
+          {
+            "feature": "x_turnover_ratio_120",
+            "gain": 142.60507941246033
+          },
+          {
+            "feature": "x_kyle_lambda_20",
+            "gain": 132.87874960899353
+          },
+          {
+            "feature": "x_market_down_beta_60",
+            "gain": 131.49327874183655
+          },
+          {
+            "feature": "x_vwap_gap_60",
+            "gain": 128.64166975021362
+          },
+          {
+            "feature": "x_wq_alpha003",
+            "gain": 124.4468502998352
+          },
+          {
+            "feature": "x_downside_vol_120",
+            "gain": 122.24959087371826
+          },
+          {
+            "feature": "x_residual_vol_60",
+            "gain": 111.30240094661713
+          },
+          {
+            "feature": "x_min_return_120",
+            "gain": 106.48264074325562
+          },
+          {
+            "feature": "x_vwap_gap_20",
+            "gain": 96.55413889884949
+          },
+          {
+            "feature": "x_max_return_120",
+            "gain": 91.78023958206177
+          },
+          {
+            "feature": "x_residual_downside_vol_60",
+            "gain": 91.23238968849182
+          }
+        ]
+      }
+    }
+  ],
+  "selected_feature_batch": "alpha158_plus_barra",
+  "model_blend_weights": [
+    0.0,
+    0.25,
+    0.5,
+    0.75,
+    1.0
+  ],
+  "blend_selection_candidates": [
+    {
+      "name": "baseline_1.00_new_0.00",
+      "candidate_weight": 0.0,
+      "selection": {
+        "performance": {
+          "total_return": 0.20810343564377742,
+          "benchmark_return": 0.09629242791971993,
+          "excess_return": 0.1118110077240575,
+          "annual_return": 0.1029923653051934,
+          "max_drawdown": -0.3348511048235302,
+          "sharpe": 0.5525650420994549,
+          "information_ratio": 0.47734050734549766,
+          "return_periods": 486,
+          "first_period_end": "2018-01-03",
+          "last_period_end": "2019-12-31"
+        },
+        "activity": {
+          "total_turnover": 21.44717935659099,
+          "annual_turnover": 10.7601942392166,
+          "rebalance_count": 49,
+          "average_event_turnover": 0.437697537889612,
+          "total_cost_return_units": 0.02573661522790918
+        }
+      }
+    },
+    {
+      "name": "baseline_0.75_new_0.25",
+      "candidate_weight": 0.25,
+      "selection": {
+        "performance": {
+          "total_return": 0.2966238330940023,
+          "benchmark_return": 0.09629242791971993,
+          "excess_return": 0.20033140517428238,
+          "annual_return": 0.1441847318280156,
+          "max_drawdown": -0.31449812677780575,
+          "sharpe": 0.713910743742597,
+          "information_ratio": 0.7768685277148042,
+          "return_periods": 486,
+          "first_period_end": "2018-01-03",
+          "last_period_end": "2019-12-31"
+        },
+        "activity": {
+          "total_turnover": 21.459553864892456,
+          "annual_turnover": 10.766402613321405,
+          "rebalance_count": 49,
+          "average_event_turnover": 0.4379500788753562,
+          "total_cost_return_units": 0.02575146463787095
+        }
+      }
+    },
+    {
+      "name": "baseline_0.50_new_0.50",
+      "candidate_weight": 0.5,
+      "selection": {
+        "performance": {
+          "total_return": 0.26682197584220946,
+          "benchmark_return": 0.09629242791971993,
+          "excess_return": 0.17052954792248953,
+          "annual_return": 0.13047232481529925,
+          "max_drawdown": -0.304067314595166,
+          "sharpe": 0.6812956612735643,
+          "information_ratio": 0.7015515924812024,
+          "return_periods": 486,
+          "first_period_end": "2018-01-03",
+          "last_period_end": "2019-12-31"
+        },
+        "activity": {
+          "total_turnover": 21.4483886787421,
+          "annual_turnover": 10.760800964279479,
+          "rebalance_count": 49,
+          "average_event_turnover": 0.43772221793351224,
+          "total_cost_return_units": 0.02573806641449053
+        }
+      }
+    },
+    {
+      "name": "baseline_0.25_new_0.75",
+      "candidate_weight": 0.75,
+      "selection": {
+        "performance": {
+          "total_return": 0.20287369534874955,
+          "benchmark_return": 0.09629242791971993,
+          "excess_return": 0.10658126742902962,
+          "annual_return": 0.10051399549736639,
+          "max_drawdown": -0.3186259839573057,
+          "sharpe": 0.5406502196534213,
+          "information_ratio": 0.4737293543295305,
+          "return_periods": 486,
+          "first_period_end": "2018-01-03",
+          "last_period_end": "2019-12-31"
+        },
+        "activity": {
+          "total_turnover": 21.29730645893345,
+          "annual_turnover": 10.685001997701924,
+          "rebalance_count": 49,
+          "average_event_turnover": 0.4346389073251724,
+          "total_cost_return_units": 0.025556767750720136
+        }
+      }
+    },
+    {
+      "name": "baseline_0.00_new_1.00",
+      "candidate_weight": 1.0,
+      "selection": {
+        "performance": {
+          "total_return": 0.2226091042770062,
+          "benchmark_return": 0.09629242791971993,
+          "excess_return": 0.12631667635728627,
+          "annual_return": 0.10983968562671587,
+          "max_drawdown": -0.2902630046072676,
+          "sharpe": 0.5962265792207753,
+          "information_ratio": 0.5449262610892178,
+          "return_periods": 486,
+          "first_period_end": "2018-01-03",
+          "last_period_end": "2019-12-31"
+        },
+        "activity": {
+          "total_turnover": 21.451694556201446,
+          "annual_turnover": 10.762459545251932,
+          "rebalance_count": 49,
+          "average_event_turnover": 0.43778968482043773,
+          "total_cost_return_units": 0.025742033467441736
+        }
+      }
+    }
+  ],
+  "selected_candidate_weight": 0.25,
+  "diagnostics": {
+    "alpha158_baseline": {
+      "feature_count": 85,
+      "diagnostic": {
+        "performance": {
+          "total_return": 3.073374693259476,
+          "benchmark_return": 1.2575433033982288,
+          "excess_return": 1.815831389861247,
+          "annual_return": 0.24586537856922952,
+          "max_drawdown": -0.27726677263861543,
+          "sharpe": 0.9334643246914222,
+          "information_ratio": 0.6353021921134077,
+          "return_periods": 1610,
+          "first_period_end": "2020-01-03",
+          "last_period_end": "2026-08-25"
+        },
+        "activity": {
+          "total_turnover": 70.9461184077187,
+          "annual_turnover": 10.676776947890893,
+          "rebalance_count": 161,
+          "average_event_turnover": 0.44065912054483647,
+          "total_cost_return_units": 0.08513534208926242
+        }
+      },
+      "causality_audit": {
+        "freeze_date": "2020-01-02",
+        "feature_count": 85,
+        "training_rows": 27684,
+        "training_dates": 786,
+        "max_training_label_end_date": "2019-12-31",
+        "strictly_mature": true,
+        "prediction_rows": 74231,
+        "top_feature_importance": [
+          {
+            "feature": "x_pb",
+            "gain": 1817.8708033561707
+          },
+          {
+            "feature": "x_price_amount_corr_40",
+            "gain": 1031.5237283706665
+          },
+          {
+            "feature": "x_min_return_120",
+            "gain": 533.5404100418091
+          },
+          {
+            "feature": "x_min_return_60",
+            "gain": 489.35401916503906
+          },
+          {
+            "feature": "x_amplitude_1",
+            "gain": 454.7394256591797
+          },
+          {
+            "feature": "x_max_return_10",
+            "gain": 450.3179874420166
+          },
+          {
+            "feature": "x_efficiency_120",
+            "gain": 419.18626642227173
+          },
+          {
+            "feature": "x_return_40",
+            "gain": 395.94320154190063
+          },
+          {
+            "feature": "x_max_return_60",
+            "gain": 313.6232075691223
+          },
+          {
+            "feature": "x_return_120",
+            "gain": 310.28953862190247
+          },
+          {
+            "feature": "x_volatility_60",
+            "gain": 290.31632947921753
+          },
+          {
+            "feature": "x_volatility_120",
+            "gain": 286.11781120300293
+          },
+          {
+            "feature": "x_max_return_20",
+            "gain": 281.22231125831604
+          },
+          {
+            "feature": "x_price_amount_corr_20",
+            "gain": 265.2588400840759
+          },
+          {
+            "feature": "x_volatility_10",
+            "gain": 219.6156086921692
+          },
+          {
+            "feature": "x_high_position_40",
+            "gain": 203.00187849998474
+          },
+          {
+            "feature": "x_pe",
+            "gain": 199.78096055984497
+          },
+          {
+            "feature": "x_volatility_5",
+            "gain": 180.7528920173645
+          },
+          {
+            "feature": "x_downside_vol_10",
+            "gain": 169.24620151519775
+          },
+          {
+            "feature": "x_ma_ratio_120",
+            "gain": 156.79976081848145
+          },
+          {
+            "feature": "x_high_position_120",
+            "gain": 138.52914905548096
+          },
+          {
+            "feature": "x_downside_vol_40",
+            "gain": 137.06166219711304
+          },
+          {
+            "feature": "x_efficiency_20",
+            "gain": 130.2761001586914
+          },
+          {
+            "feature": "x_min_return_40",
+            "gain": 124.96871089935303
+          },
+          {
+            "feature": "x_min_return_20",
+            "gain": 105.54563999176025
+          }
+        ]
+      }
+    },
+    "alpha158_plus_barra": {
+      "feature_count": 100,
+      "diagnostic": {
+        "performance": {
+          "total_return": 3.0383868826533353,
+          "benchmark_return": 1.2575433033982288,
+          "excess_return": 1.7808435792551065,
+          "annual_return": 0.24418430432570215,
+          "max_drawdown": -0.32035247856290106,
+          "sharpe": 0.9277514747114105,
+          "information_ratio": 0.6328690166803355,
+          "return_periods": 1610,
+          "first_period_end": "2020-01-03",
+          "last_period_end": "2026-08-25"
+        },
+        "activity": {
+          "total_turnover": 70.53956906878821,
+          "annual_turnover": 10.615594790114082,
+          "rebalance_count": 161,
+          "average_event_turnover": 0.4381339693713555,
+          "total_cost_return_units": 0.08464748288254588
+        }
+      },
+      "causality_audit": {
+        "freeze_date": "2020-01-02",
+        "feature_count": 100,
+        "training_rows": 27684,
+        "training_dates": 786,
+        "max_training_label_end_date": "2019-12-31",
+        "strictly_mature": true,
+        "prediction_rows": 74231,
+        "top_feature_importance": [
+          {
+            "feature": "x_pb",
+            "gain": 1278.990538597107
+          },
+          {
+            "feature": "x_kyle_lambda_20",
+            "gain": 1029.1258506774902
+          },
+          {
+            "feature": "x_market_corr_60",
+            "gain": 628.7361354827881
+          },
+          {
+            "feature": "x_price_amount_corr_40",
+            "gain": 621.4789237976074
+          },
+          {
+            "feature": "x_low_position_20",
+            "gain": 561.9629049301147
+          },
+          {
+            "feature": "x_min_return_60",
+            "gain": 441.3511447906494
+          },
+          {
+            "feature": "x_volatility_10",
+            "gain": 366.78495836257935
+          },
+          {
+            "feature": "x_pe",
+            "gain": 361.15057730674744
+          },
+          {
+            "feature": "x_return_40",
+            "gain": 318.41491174697876
+          },
+          {
+            "feature": "x_return_120",
+            "gain": 287.62142992019653
+          },
+          {
+            "feature": "x_amplitude_1",
+            "gain": 281.81470251083374
+          },
+          {
+            "feature": "x_residual_vol_20",
+            "gain": 263.6202583312988
+          },
+          {
+            "feature": "x_kyle_lambda_60",
+            "gain": 251.88120365142822
+          },
+          {
+            "feature": "x_max_return_60",
+            "gain": 225.42455959320068
+          },
+          {
+            "feature": "x_max_return_10",
+            "gain": 225.2447600364685
+          },
+          {
+            "feature": "x_efficiency_120",
+            "gain": 221.74525213241577
+          },
+          {
+            "feature": "x_expected_shortfall_20",
+            "gain": 212.076518535614
+          },
+          {
+            "feature": "x_volatility_5",
+            "gain": 211.93379974365234
+          },
+          {
+            "feature": "x_market_up_beta_60",
+            "gain": 208.4482913017273
+          },
+          {
+            "feature": "x_market_down_beta_60",
+            "gain": 191.54958963394165
+          },
+          {
+            "feature": "x_volatility_120",
+            "gain": 164.43951034545898
+          },
+          {
+            "feature": "x_residual_downside_vol_20",
+            "gain": 163.9413709640503
+          },
+          {
+            "feature": "x_impact_shock_frequency_20",
+            "gain": 156.7858098745346
+          },
+          {
+            "feature": "x_price_amount_corr_20",
+            "gain": 155.77452993392944
+          },
+          {
+            "feature": "x_max_return_20",
+            "gain": 154.9718987941742
+          }
+        ]
+      }
+    },
+    "selected_model_blend": {
+      "baseline_feature_count": 85,
+      "candidate_feature_count": 100,
+      "candidate_feature_batch": "alpha158_plus_barra",
+      "candidate_weight": 0.25,
+      "diagnostic": {
+        "performance": {
+          "total_return": 3.25219042482093,
+          "benchmark_return": 1.2575433033982288,
+          "excess_return": 1.9946471214227013,
+          "annual_return": 0.2542714990370045,
+          "max_drawdown": -0.26100603943520617,
+          "sharpe": 0.9555452124863248,
+          "information_ratio": 0.6840107738504245,
+          "return_periods": 1610,
+          "first_period_end": "2020-01-03",
+          "last_period_end": "2026-08-25"
+        },
+        "activity": {
+          "total_turnover": 71.02851679029693,
+          "annual_turnover": 10.689177191503926,
+          "rebalance_count": 161,
+          "average_event_turnover": 0.44117091174097484,
+          "total_cost_return_units": 0.08523422014835633
+        }
+      },
+      "causality_audit": {
+        "strictly_mature": true,
+        "component_freeze_date": "2020-01-02"
+      }
+    }
+  },
+  "promotion_gate": {
+    "passed": true,
+    "checks": {
+      "annual_return_not_lower": true,
+      "sharpe_not_lower": true,
+      "max_drawdown_not_worse": true,
+      "annual_turnover_not_higher_10pct": true
+    }
+  },
+  "curve_data": "reports\\lgbm_new_factors_v1_curves.csv",
+  "universe_snapshot_run_id": "20260826213839-f0b316",
+  "production_change": false,
+  "warnings": [
+    "688825 历史数据不足，已跳过",
+    "2020-2026 is already revealed and is only a deployment blocker.",
+    "The current Top50 universe is backfilled and has survivorship bias.",
+    "Current-vintage adjusted prices are not strict point-in-time prices.",
+    "A passing historical gate still requires a new forward paper window."
+  ]
+}

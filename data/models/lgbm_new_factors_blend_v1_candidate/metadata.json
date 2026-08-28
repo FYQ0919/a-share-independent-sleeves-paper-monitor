@@ -1,0 +1,447 @@
+{
+  "model_version": "lgbm_new_factors_blend_v1_candidate",
+  "artifact_status": "frozen_for_forward_shadow_only",
+  "created_at": "2026-08-28T22:23:40.129849",
+  "training_as_of_exclusive": "2026-08-26",
+  "model_config": {
+    "baseline_weight": 0.4,
+    "num_leaves": 7,
+    "max_depth": 3,
+    "min_child_samples": 300,
+    "n_estimators": 120,
+    "feature_fraction": 0.7
+  },
+  "rule_weight": 0.4,
+  "alpha158_model_weight": 0.75,
+  "alpha158_barra_model_weight": 0.25,
+  "baseline_model_file": "alpha158_model.txt",
+  "baseline_model_sha256": "850e2ef15fc159fd0f1dfbea1b81708fa7767e4a2fff100f5ac7c29122241415",
+  "candidate_model_file": "alpha158_barra_model.txt",
+  "candidate_model_sha256": "aac36fe481585b8dd71954266fb2047846a559cd5ef5a2a9638d464df8d4f109",
+  "baseline_model_audit": {
+    "feature_count": 85,
+    "feature_schema_sha256": "f7e4368cffb565acf8d3a31702098abdbb427d738fe558e26237dbc3fca44e5d",
+    "feature_columns": [
+      "x_gap_1",
+      "x_amplitude_1",
+      "x_close_location_1",
+      "x_intraday_return",
+      "x_volume_change_1",
+      "x_amount_change_1",
+      "x_pe",
+      "x_pb",
+      "x_return_2",
+      "x_return_3",
+      "x_return_5",
+      "x_return_10",
+      "x_return_20",
+      "x_return_40",
+      "x_return_60",
+      "x_return_120",
+      "x_ma_ratio_5",
+      "x_high_position_5",
+      "x_low_position_5",
+      "x_volatility_5",
+      "x_downside_vol_5",
+      "x_amount_ratio_5",
+      "x_volume_ratio_5",
+      "x_turnover_ratio_5",
+      "x_efficiency_5",
+      "x_max_return_5",
+      "x_min_return_5",
+      "x_ma_ratio_10",
+      "x_high_position_10",
+      "x_low_position_10",
+      "x_volatility_10",
+      "x_downside_vol_10",
+      "x_amount_ratio_10",
+      "x_volume_ratio_10",
+      "x_turnover_ratio_10",
+      "x_efficiency_10",
+      "x_max_return_10",
+      "x_min_return_10",
+      "x_ma_ratio_20",
+      "x_high_position_20",
+      "x_low_position_20",
+      "x_volatility_20",
+      "x_downside_vol_20",
+      "x_amount_ratio_20",
+      "x_volume_ratio_20",
+      "x_turnover_ratio_20",
+      "x_efficiency_20",
+      "x_max_return_20",
+      "x_min_return_20",
+      "x_ma_ratio_40",
+      "x_high_position_40",
+      "x_low_position_40",
+      "x_volatility_40",
+      "x_downside_vol_40",
+      "x_amount_ratio_40",
+      "x_volume_ratio_40",
+      "x_turnover_ratio_40",
+      "x_efficiency_40",
+      "x_max_return_40",
+      "x_min_return_40",
+      "x_ma_ratio_60",
+      "x_high_position_60",
+      "x_low_position_60",
+      "x_volatility_60",
+      "x_downside_vol_60",
+      "x_amount_ratio_60",
+      "x_volume_ratio_60",
+      "x_turnover_ratio_60",
+      "x_efficiency_60",
+      "x_max_return_60",
+      "x_min_return_60",
+      "x_ma_ratio_120",
+      "x_high_position_120",
+      "x_low_position_120",
+      "x_volatility_120",
+      "x_downside_vol_120",
+      "x_amount_ratio_120",
+      "x_volume_ratio_120",
+      "x_turnover_ratio_120",
+      "x_efficiency_120",
+      "x_max_return_120",
+      "x_min_return_120",
+      "x_price_amount_corr_10",
+      "x_price_amount_corr_20",
+      "x_price_amount_corr_40"
+    ],
+    "training_rows": 101401,
+    "training_dates": 2397,
+    "training_signal_start": "2016-09-23",
+    "training_signal_end": "2026-08-10",
+    "max_training_label_end_date": "2026-08-25",
+    "strictly_mature": true,
+    "top_feature_importance": [
+      {
+        "feature": "x_pb",
+        "gain": 3553.7842774391174
+      },
+      {
+        "feature": "x_downside_vol_40",
+        "gain": 2007.68798828125
+      },
+      {
+        "feature": "x_price_amount_corr_40",
+        "gain": 1126.3389797210693
+      },
+      {
+        "feature": "x_downside_vol_20",
+        "gain": 1079.1425981521606
+      },
+      {
+        "feature": "x_low_position_20",
+        "gain": 795.9540004730225
+      },
+      {
+        "feature": "x_high_position_120",
+        "gain": 686.5487127304077
+      },
+      {
+        "feature": "x_min_return_60",
+        "gain": 642.0724658966064
+      },
+      {
+        "feature": "x_volatility_20",
+        "gain": 590.3509044647217
+      },
+      {
+        "feature": "x_efficiency_120",
+        "gain": 535.4298748970032
+      },
+      {
+        "feature": "x_min_return_20",
+        "gain": 516.9099798202515
+      },
+      {
+        "feature": "x_price_amount_corr_20",
+        "gain": 466.7141695022583
+      },
+      {
+        "feature": "x_max_return_40",
+        "gain": 448.0984077453613
+      },
+      {
+        "feature": "x_max_return_60",
+        "gain": 428.7530107498169
+      },
+      {
+        "feature": "x_volatility_120",
+        "gain": 387.94657039642334
+      },
+      {
+        "feature": "x_min_return_120",
+        "gain": 354.7257385253906
+      },
+      {
+        "feature": "x_min_return_40",
+        "gain": 325.992027759552
+      },
+      {
+        "feature": "x_max_return_20",
+        "gain": 305.6240978240967
+      },
+      {
+        "feature": "x_efficiency_10",
+        "gain": 292.0390977859497
+      },
+      {
+        "feature": "x_high_position_60",
+        "gain": 277.1999206542969
+      },
+      {
+        "feature": "x_high_position_40",
+        "gain": 244.06644916534424
+      },
+      {
+        "feature": "x_max_return_120",
+        "gain": 212.6965365409851
+      },
+      {
+        "feature": "x_downside_vol_60",
+        "gain": 208.43050861358643
+      },
+      {
+        "feature": "x_low_position_120",
+        "gain": 201.1407594680786
+      },
+      {
+        "feature": "x_amplitude_1",
+        "gain": 162.70087099075317
+      },
+      {
+        "feature": "x_ma_ratio_60",
+        "gain": 160.64553022384644
+      }
+    ]
+  },
+  "candidate_model_audit": {
+    "feature_count": 100,
+    "feature_schema_sha256": "bba0faa9d57bc038e90cf8450d41e180691ede3e0b7c628a309fffe49bda70a4",
+    "feature_columns": [
+      "x_gap_1",
+      "x_amplitude_1",
+      "x_close_location_1",
+      "x_intraday_return",
+      "x_volume_change_1",
+      "x_amount_change_1",
+      "x_pe",
+      "x_pb",
+      "x_return_2",
+      "x_return_3",
+      "x_return_5",
+      "x_return_10",
+      "x_return_20",
+      "x_return_40",
+      "x_return_60",
+      "x_return_120",
+      "x_ma_ratio_5",
+      "x_high_position_5",
+      "x_low_position_5",
+      "x_volatility_5",
+      "x_downside_vol_5",
+      "x_amount_ratio_5",
+      "x_volume_ratio_5",
+      "x_turnover_ratio_5",
+      "x_efficiency_5",
+      "x_max_return_5",
+      "x_min_return_5",
+      "x_ma_ratio_10",
+      "x_high_position_10",
+      "x_low_position_10",
+      "x_volatility_10",
+      "x_downside_vol_10",
+      "x_amount_ratio_10",
+      "x_volume_ratio_10",
+      "x_turnover_ratio_10",
+      "x_efficiency_10",
+      "x_max_return_10",
+      "x_min_return_10",
+      "x_ma_ratio_20",
+      "x_high_position_20",
+      "x_low_position_20",
+      "x_volatility_20",
+      "x_downside_vol_20",
+      "x_amount_ratio_20",
+      "x_volume_ratio_20",
+      "x_turnover_ratio_20",
+      "x_efficiency_20",
+      "x_max_return_20",
+      "x_min_return_20",
+      "x_ma_ratio_40",
+      "x_high_position_40",
+      "x_low_position_40",
+      "x_volatility_40",
+      "x_downside_vol_40",
+      "x_amount_ratio_40",
+      "x_volume_ratio_40",
+      "x_turnover_ratio_40",
+      "x_efficiency_40",
+      "x_max_return_40",
+      "x_min_return_40",
+      "x_ma_ratio_60",
+      "x_high_position_60",
+      "x_low_position_60",
+      "x_volatility_60",
+      "x_downside_vol_60",
+      "x_amount_ratio_60",
+      "x_volume_ratio_60",
+      "x_turnover_ratio_60",
+      "x_efficiency_60",
+      "x_max_return_60",
+      "x_min_return_60",
+      "x_ma_ratio_120",
+      "x_high_position_120",
+      "x_low_position_120",
+      "x_volatility_120",
+      "x_downside_vol_120",
+      "x_amount_ratio_120",
+      "x_volume_ratio_120",
+      "x_turnover_ratio_120",
+      "x_efficiency_120",
+      "x_max_return_120",
+      "x_min_return_120",
+      "x_price_amount_corr_10",
+      "x_price_amount_corr_20",
+      "x_price_amount_corr_40",
+      "x_residual_vol_20",
+      "x_residual_vol_60",
+      "x_residual_downside_vol_20",
+      "x_residual_downside_vol_60",
+      "x_downside_deviation_20",
+      "x_downside_deviation_60",
+      "x_expected_shortfall_20",
+      "x_expected_shortfall_60",
+      "x_kyle_lambda_20",
+      "x_kyle_lambda_60",
+      "x_impact_shock_frequency_20",
+      "x_impact_shock_frequency_60",
+      "x_market_corr_60",
+      "x_market_down_beta_60",
+      "x_market_up_beta_60"
+    ],
+    "training_rows": 101401,
+    "training_dates": 2397,
+    "training_signal_start": "2016-09-23",
+    "training_signal_end": "2026-08-10",
+    "max_training_label_end_date": "2026-08-25",
+    "strictly_mature": true,
+    "top_feature_importance": [
+      {
+        "feature": "x_pb",
+        "gain": 4650.499500751495
+      },
+      {
+        "feature": "x_price_amount_corr_40",
+        "gain": 1293.5787324905396
+      },
+      {
+        "feature": "x_residual_downside_vol_20",
+        "gain": 1166.1717476844788
+      },
+      {
+        "feature": "x_residual_vol_20",
+        "gain": 1122.552580833435
+      },
+      {
+        "feature": "x_market_corr_60",
+        "gain": 842.7353081703186
+      },
+      {
+        "feature": "x_high_position_120",
+        "gain": 678.9997982978821
+      },
+      {
+        "feature": "x_low_position_20",
+        "gain": 651.9966077804565
+      },
+      {
+        "feature": "x_min_return_60",
+        "gain": 600.419017791748
+      },
+      {
+        "feature": "x_efficiency_120",
+        "gain": 405.442982673645
+      },
+      {
+        "feature": "x_market_up_beta_60",
+        "gain": 400.09496808052063
+      },
+      {
+        "feature": "x_expected_shortfall_20",
+        "gain": 364.77662992477417
+      },
+      {
+        "feature": "x_min_return_20",
+        "gain": 356.1840786933899
+      },
+      {
+        "feature": "x_efficiency_10",
+        "gain": 353.4737877845764
+      },
+      {
+        "feature": "x_price_amount_corr_20",
+        "gain": 345.4723467826843
+      },
+      {
+        "feature": "x_min_return_40",
+        "gain": 340.90491580963135
+      },
+      {
+        "feature": "x_downside_vol_20",
+        "gain": 326.8323001861572
+      },
+      {
+        "feature": "x_max_return_60",
+        "gain": 277.0223693847656
+      },
+      {
+        "feature": "x_residual_downside_vol_60",
+        "gain": 272.179630279541
+      },
+      {
+        "feature": "x_downside_vol_120",
+        "gain": 253.967191696167
+      },
+      {
+        "feature": "x_market_down_beta_60",
+        "gain": 243.29047060012817
+      },
+      {
+        "feature": "x_volatility_120",
+        "gain": 239.90301990509033
+      },
+      {
+        "feature": "x_kyle_lambda_60",
+        "gain": 236.03402090072632
+      },
+      {
+        "feature": "x_downside_vol_40",
+        "gain": 233.93669843673706
+      },
+      {
+        "feature": "x_low_position_120",
+        "gain": 216.0355405807495
+      },
+      {
+        "feature": "x_high_position_60",
+        "gain": 202.2201919555664
+      }
+    ]
+  },
+  "research_result": "data\\lgbm_new_factors_v1.json",
+  "research_result_sha256": "d247bd27164424fa48ee2cb8b6158d41c5aec69bd00742a09294ebbd6301954d",
+  "universe_snapshot_run_id": "20260826213839-f0b316",
+  "execution_contract": "signal close; next-open; Top5; 10-session rebalance; 12bp one-way cost",
+  "strict_no_lookahead_certified": false,
+  "production_change": false,
+  "warnings": [
+    "688825 历史数据不足，已跳过",
+    "Historical promotion used an already revealed 2020-2026 blocker window.",
+    "The current Top50 universe is backfilled and has survivorship bias.",
+    "Current-vintage adjusted prices are not strict point-in-time prices.",
+    "This artifact is shadow-only until a new forward paper window is completed."
+  ]
+}

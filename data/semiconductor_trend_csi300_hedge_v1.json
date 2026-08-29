@@ -1,0 +1,455 @@
+{
+  "generated_at": "2026-08-29T20:59:26.290307+08:00",
+  "status": "historical_diagnostic_only_not_deployed",
+  "strategy": "semiconductor trend expert plus causal CSI300 futures hedge",
+  "parameters": {
+    "lookback": 120,
+    "threshold": 1.0,
+    "evaluated_maximum_hedge_ratios": [
+      0.0,
+      0.25,
+      0.4,
+      0.5,
+      0.6,
+      0.75
+    ],
+    "reference_ratio": 0.5,
+    "signal_at": "close",
+    "execution_at": "next_open",
+    "pnl_window": "open_to_next_open",
+    "position_change_cost_bps": 2.0
+  },
+  "ratio_diagnostics": [
+    {
+      "maximum_hedge_ratio": 0.0,
+      "windows": {
+        "2020_2023": {
+          "total_return": 0.3184731777999903,
+          "annual_return": 0.074468729945669,
+          "max_drawdown": -0.3542345271619245,
+          "sharpe": 0.387330892889438,
+          "terminal_value": 1.3184731777999903,
+          "observations": 970,
+          "average_actual_hedge": 0.0,
+          "position_changes": 0
+        },
+        "2024_2025": {
+          "total_return": 2.0505513904433115,
+          "annual_return": 0.7851593794107832,
+          "max_drawdown": -0.22995516191846288,
+          "sharpe": 1.6179812737998107,
+          "terminal_value": 3.0505513904433115,
+          "observations": 485,
+          "average_actual_hedge": 0.0,
+          "position_changes": 0
+        },
+        "2026_ytd": {
+          "total_return": 1.2658701595450426,
+          "annual_return": 2.748359062861301,
+          "max_drawdown": -0.28967863055998844,
+          "sharpe": 2.8579697211868575,
+          "terminal_value": 2.2658701595450426,
+          "observations": 156,
+          "average_actual_hedge": 0.0,
+          "position_changes": 0
+        },
+        "2026_june": {
+          "total_return": 0.4193852668967306,
+          "annual_return": 54.23822561332346,
+          "max_drawdown": -0.05929485942977153,
+          "sharpe": 6.806493354987338,
+          "terminal_value": 1.4193852668967306,
+          "observations": 22,
+          "average_actual_hedge": 0.0,
+          "position_changes": 0
+        },
+        "full": {
+          "total_return": 8.113488813599917,
+          "annual_return": 0.41292227393667846,
+          "max_drawdown": -0.3542345271619245,
+          "sharpe": 1.129098904384417,
+          "terminal_value": 9.113488813599917,
+          "observations": 1611,
+          "average_actual_hedge": 0.0,
+          "position_changes": 0
+        }
+      }
+    },
+    {
+      "maximum_hedge_ratio": 0.25,
+      "windows": {
+        "2020_2023": {
+          "total_return": 0.37152323711744617,
+          "annual_return": 0.08553676040550462,
+          "max_drawdown": -0.32851967489554046,
+          "sharpe": 0.4271183560869723,
+          "terminal_value": 1.3715232371174462,
+          "observations": 970,
+          "average_actual_hedge": 0.1420103092783505,
+          "position_changes": 33
+        },
+        "2024_2025": {
+          "total_return": 1.963121644030494,
+          "annual_return": 0.7583899550492235,
+          "max_drawdown": -0.21650599789504976,
+          "sharpe": 1.6099090149886461,
+          "terminal_value": 2.963121644030494,
+          "observations": 485,
+          "average_actual_hedge": 0.0731958762886598,
+          "position_changes": 19
+        },
+        "2026_ytd": {
+          "total_return": 1.2582346516277498,
+          "annual_return": 2.7279760062900436,
+          "max_drawdown": -0.289782997796618,
+          "sharpe": 2.871912685925815,
+          "terminal_value": 2.25823465162775,
+          "observations": 156,
+          "average_actual_hedge": 0.07051282051282051,
+          "position_changes": 11
+        },
+        "2026_june": {
+          "total_return": 0.4193852668967306,
+          "annual_return": 54.23822561332346,
+          "max_drawdown": -0.05929485942977153,
+          "sharpe": 6.806493354987338,
+          "terminal_value": 1.4193852668967306,
+          "observations": 22,
+          "average_actual_hedge": 0.0,
+          "position_changes": 0
+        },
+        "full": {
+          "total_return": 8.177443469111912,
+          "annual_return": 0.4144686991292721,
+          "max_drawdown": -0.32851967489554046,
+          "sharpe": 1.157802878040587,
+          "terminal_value": 9.177443469111912,
+          "observations": 1611,
+          "average_actual_hedge": 0.1143699565487275,
+          "position_changes": 63
+        }
+      }
+    },
+    {
+      "maximum_hedge_ratio": 0.4,
+      "windows": {
+        "2020_2023": {
+          "total_return": 0.4013969345657791,
+          "annual_return": 0.0916305561442643,
+          "max_drawdown": -0.31327307136589133,
+          "sharpe": 0.45053329825924193,
+          "terminal_value": 1.401396934565779,
+          "observations": 970,
+          "average_actual_hedge": 0.22721649484536083,
+          "position_changes": 33
+        },
+        "2024_2025": {
+          "total_return": 1.9100660982605553,
+          "annual_return": 0.7419600218374269,
+          "max_drawdown": -0.20839219615858673,
+          "sharpe": 1.6018264309599537,
+          "terminal_value": 2.9100660982605553,
+          "observations": 485,
+          "average_actual_hedge": 0.11711340206185566,
+          "position_changes": 19
+        },
+        "2026_ytd": {
+          "total_return": 1.2533128647330618,
+          "annual_return": 2.7148597054980916,
+          "max_drawdown": -0.28988802803046376,
+          "sharpe": 2.877670703126996,
+          "terminal_value": 2.253312864733062,
+          "observations": 156,
+          "average_actual_hedge": 0.11282051282051284,
+          "position_changes": 11
+        },
+        "2026_june": {
+          "total_return": 0.4193852668967306,
+          "annual_return": 54.23822561332346,
+          "max_drawdown": -0.05929485942977153,
+          "sharpe": 6.806493354987338,
+          "terminal_value": 1.4193852668967306,
+          "observations": 22,
+          "average_actual_hedge": 0.0,
+          "position_changes": 0
+        },
+        "full": {
+          "total_return": 8.189365231195444,
+          "annual_return": 0.41475596183236263,
+          "max_drawdown": -0.31327307136589133,
+          "sharpe": 1.1720877495191804,
+          "terminal_value": 9.189365231195444,
+          "observations": 1611,
+          "average_actual_hedge": 0.18299193047796397,
+          "position_changes": 63
+        }
+      }
+    },
+    {
+      "maximum_hedge_ratio": 0.5,
+      "windows": {
+        "2020_2023": {
+          "total_return": 0.4204172640067265,
+          "annual_return": 0.09546049131972567,
+          "max_drawdown": -0.30320023625131753,
+          "sharpe": 0.4656524959416482,
+          "terminal_value": 1.4204172640067265,
+          "observations": 970,
+          "average_actual_hedge": 0.284020618556701,
+          "position_changes": 33
+        },
+        "2024_2025": {
+          "total_return": 1.8744778887481917,
+          "annual_return": 0.7308585156786691,
+          "max_drawdown": -0.20408205883894848,
+          "sharpe": 1.5949910759373511,
+          "terminal_value": 2.8744778887481917,
+          "observations": 485,
+          "average_actual_hedge": 0.1463917525773196,
+          "position_changes": 19
+        },
+        "2026_ytd": {
+          "total_return": 1.2498908995549893,
+          "annual_return": 2.705750732222259,
+          "max_drawdown": -0.2899757354341549,
+          "sharpe": 2.880372769112485,
+          "terminal_value": 2.2498908995549893,
+          "observations": 156,
+          "average_actual_hedge": 0.14102564102564102,
+          "position_changes": 11
+        },
+        "2026_june": {
+          "total_return": 0.4193852668967306,
+          "annual_return": 54.23822561332346,
+          "max_drawdown": -0.05929485942977153,
+          "sharpe": 6.806493354987338,
+          "terminal_value": 1.4193852668967306,
+          "observations": 22,
+          "average_actual_hedge": 0.0,
+          "position_changes": 0
+        },
+        "full": {
+          "total_return": 8.186210088376232,
+          "annual_return": 0.41467996719518396,
+          "max_drawdown": -0.30320023625131753,
+          "sharpe": 1.1801507073005046,
+          "terminal_value": 9.186210088376232,
+          "observations": 1611,
+          "average_actual_hedge": 0.228739913097455,
+          "position_changes": 63
+        }
+      }
+    },
+    {
+      "maximum_hedge_ratio": 0.6,
+      "windows": {
+        "2020_2023": {
+          "total_return": 0.43867782854087256,
+          "annual_return": 0.09910188674860887,
+          "max_drawdown": -0.2932094714675213,
+          "sharpe": 0.48019369070030005,
+          "terminal_value": 1.4386778285408726,
+          "observations": 970,
+          "average_actual_hedge": 0.3408247422680412,
+          "position_changes": 33
+        },
+        "2024_2025": {
+          "total_return": 1.8387327838897551,
+          "annual_return": 0.7196413974711446,
+          "max_drawdown": -0.20009450717580446,
+          "sharpe": 1.5869515777345062,
+          "terminal_value": 2.838732783889755,
+          "observations": 485,
+          "average_actual_hedge": 0.1756701030927835,
+          "position_changes": 19
+        },
+        "2026_ytd": {
+          "total_return": 1.2463569537500176,
+          "annual_return": 2.6963526209045163,
+          "max_drawdown": -0.2900776008116609,
+          "sharpe": 2.882141251341855,
+          "terminal_value": 2.2463569537500176,
+          "observations": 156,
+          "average_actual_hedge": 0.1692307692307692,
+          "position_changes": 11
+        },
+        "2026_june": {
+          "total_return": 0.4193852668967306,
+          "annual_return": 54.23822561332346,
+          "max_drawdown": -0.05929485942977153,
+          "sharpe": 6.806493354987338,
+          "terminal_value": 1.4193852668967306,
+          "observations": 22,
+          "average_actual_hedge": 0.0,
+          "position_changes": 0
+        },
+        "full": {
+          "total_return": 8.174171033271364,
+          "annual_return": 0.41438979257281794,
+          "max_drawdown": -0.2932094714675213,
+          "sharpe": 1.186920484116928,
+          "terminal_value": 9.174171033271364,
+          "observations": 1611,
+          "average_actual_hedge": 0.27448789571694593,
+          "position_changes": 63
+        }
+      }
+    },
+    {
+      "maximum_hedge_ratio": 0.75,
+      "windows": {
+        "2020_2023": {
+          "total_return": 0.4645657331963067,
+          "annual_return": 0.10420609254604796,
+          "max_drawdown": -0.2783938222072794,
+          "sharpe": 0.5005660236201256,
+          "terminal_value": 1.4645657331963067,
+          "observations": 970,
+          "average_actual_hedge": 0.42603092783505153,
+          "position_changes": 33
+        },
+        "2024_2025": {
+          "total_return": 1.7848533619286124,
+          "annual_return": 0.7026045475897211,
+          "max_drawdown": -0.1941236050993551,
+          "sharpe": 1.572563115055279,
+          "terminal_value": 2.7848533619286124,
+          "observations": 485,
+          "average_actual_hedge": 0.21958762886597938,
+          "position_changes": 19
+        },
+        "2026_ytd": {
+          "total_return": 1.240847308758322,
+          "annual_return": 2.6817185145764304,
+          "max_drawdown": -0.29025695877555524,
+          "sharpe": 2.8830045330541725,
+          "terminal_value": 2.240847308758322,
+          "observations": 156,
+          "average_actual_hedge": 0.21153846153846154,
+          "position_changes": 11
+        },
+        "2026_june": {
+          "total_return": 0.4193852668967306,
+          "annual_return": 54.23822561332346,
+          "max_drawdown": -0.05929485942977153,
+          "sharpe": 6.806493354987338,
+          "terminal_value": 1.4193852668967306,
+          "observations": 22,
+          "average_actual_hedge": 0.0,
+          "position_changes": 0
+        },
+        "full": {
+          "total_return": 8.139521639304546,
+          "annual_return": 0.4135528496840657,
+          "max_drawdown": -0.290256958775555,
+          "sharpe": 1.1944389407122278,
+          "terminal_value": 9.139521639304546,
+          "observations": 1611,
+          "average_actual_hedge": 0.3431098696461825,
+          "position_changes": 63
+        }
+      }
+    }
+  ],
+  "reference_50pct_changes": {
+    "2020_2023": {
+      "annual_return_pp": 0.020991761374056672,
+      "sharpe": 0.0783216030522102,
+      "max_drawdown_pp": 0.05103429091060696
+    },
+    "2024_2025": {
+      "annual_return_pp": -0.05430086373211407,
+      "sharpe": -0.022990197862459594,
+      "max_drawdown_pp": 0.025873103079514403
+    },
+    "2026_ytd": {
+      "annual_return_pp": -0.0426083306390419,
+      "sharpe": 0.02240304792562764,
+      "max_drawdown_pp": -0.0002971048741664539
+    },
+    "2026_june": {
+      "annual_return_pp": 0.0,
+      "sharpe": 0.0,
+      "max_drawdown_pp": 0.0
+    },
+    "full": {
+      "annual_return_pp": 0.0017576932585054994,
+      "sharpe": 0.051051802916087574,
+      "max_drawdown_pp": 0.05103429091060696
+    }
+  },
+  "current_lgbm_50pct_reference": {
+    "2020_2023": {
+      "total_return": 0.7375313617426957,
+      "annual_return": 0.15433807003833944,
+      "max_drawdown": -0.26803953161000715,
+      "sharpe": 0.6853486949967945,
+      "terminal_value": 1.7375313617426957,
+      "observations": 970,
+      "average_actual_hedge": 0.284020618556701,
+      "position_changes": 33
+    },
+    "2024_2025": {
+      "total_return": 1.7962117271756806,
+      "annual_return": 0.7062091822377328,
+      "max_drawdown": -0.17677913899745745,
+      "sharpe": 1.6178567040758196,
+      "terminal_value": 2.7962117271756806,
+      "observations": 485,
+      "average_actual_hedge": 0.1463917525773196,
+      "position_changes": 19
+    },
+    "2026_ytd": {
+      "total_return": 0.4621992501402039,
+      "annual_return": 0.847349440437086,
+      "max_drawdown": -0.12126962979786404,
+      "sharpe": 2.246610709535892,
+      "terminal_value": 1.462199250140204,
+      "observations": 156,
+      "average_actual_hedge": 0.14102564102564102,
+      "position_changes": 11
+    },
+    "2026_june": {
+      "total_return": 0.04885195777996176,
+      "annual_return": 0.7269178059957229,
+      "max_drawdown": -0.04791990834404514,
+      "sharpe": 1.7522190844571683,
+      "terminal_value": 1.0488519577799618,
+      "observations": 22,
+      "average_actual_hedge": 0.0,
+      "position_changes": 0
+    },
+    "full": {
+      "total_return": 6.104103201315153,
+      "annual_return": 0.3589296657733274,
+      "max_drawdown": -0.26803953161000715,
+      "sharpe": 1.1693046029210592,
+      "terminal_value": 7.104103201315153,
+      "observations": 1611,
+      "average_actual_hedge": 0.228739913097455,
+      "position_changes": 63
+    }
+  },
+  "gate": {
+    "passed": true,
+    "checks": {
+      "max_drawdown_improves_at_least_3pp": true,
+      "annual_return_retains_95pct": true,
+      "sharpe_not_lower": true,
+      "early_drawdown_not_worse": true
+    }
+  },
+  "production_change": false,
+  "artifacts": {
+    "json": "data\\semiconductor_trend_csi300_hedge_v1.json",
+    "report": "reports\\semiconductor_trend_csi300_hedge_v1.md",
+    "curves": "reports\\semiconductor_trend_csi300_hedge_v1_curves.csv"
+  },
+  "limitations": [
+    "The CSI300 open-to-open return is a futures proxy without basis, margin, roll, financing or collateral yield.",
+    "The trend strategy uses a frozen current Top50 backfilled through history and has constituent and survivorship bias.",
+    "The 2020-2026 interval is repeatedly revealed and cannot select a production hedge ratio.",
+    "The trend hypothesis was prompted by the already revealed June 2026 equipment rally.",
+    "No production or paper-trading configuration was changed."
+  ]
+}

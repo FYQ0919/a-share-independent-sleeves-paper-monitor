@@ -3,9 +3,9 @@ requires = ["setuptools>=68"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "a-share-lgbm-75-25-strategy"
-version = "0.2.0"
-description = "Frozen 75/25 Alpha158-Barra LightGBM with a causal volatility-target risk overlay"
+name = "a-share-research-desk"
+version = "0.1.0"
+description = "A-share multi-factor screener, sector analysis, daily reports and notifications"
 requires-python = ">=3.9"
 dependencies = [
   "akshare>=1.16.0",
@@ -23,6 +23,7 @@ dependencies = [
 [project.optional-dependencies]
 dev = ["pytest>=8,<9"]
 research = ["lightgbm==4.6.0"]
+master = ["torch==2.5.1"]
 
 [tool.setuptools.packages.find]
 include = ["app*"]

@@ -65,6 +65,8 @@ def test_blend_pipeline_uses_independent_portfolio_and_paper_account(tmp_path):
         lgbm_model_version=MODEL_VERSION,
         lgbm_model_dir=MODEL_DIR,
         lgbm_universe_mode="frozen_snapshot",
+        independent_sleeves_enabled=False,
+        index_hedge_enabled=False,
         database_path=tmp_path / "research.db",
         report_dir=tmp_path / "reports",
         cache_dir=tmp_path / "cache",

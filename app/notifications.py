@@ -1,4 +1,7 @@
+import base64
 from email.message import EmailMessage
+import hashlib
+from pathlib import Path
 import smtplib
 from typing import Dict, List
 
@@ -40,6 +43,9 @@ class NotificationService:
                 self.settings.wecom_webhook_url,
                 {"msgtype": "markdown", "markdown": {"content": message[:3800]}},
             ))
+            image_path = (strategy_signal or {}).get("paper_curve", {}).get("image_path")
+            if image_path:
+                results.append(self._send_wecom_image(Path(image_path)))
         if self.settings.generic_webhook_url:
             results.append(self._post(
                 "通用 Webhook",
@@ -51,6 +57,34 @@ class NotificationService:
         if not results:
             results.append({"channel": "未配置", "ok": False, "detail": "研报已保存，尚未配置推送渠道"})
         return results
+
+    def _send_wecom_image(self, path: Path) -> Dict:
+        try:
+            payload = self._wecom_image_payload(path)
+        except Exception as exc:
+            return {"channel": "企业微信图片", "ok": False, "detail": str(exc)}
+        return self._post(
+            "企业微信图片",
+            self.settings.wecom_webhook_url,
+            payload,
+        )
+
+    @staticmethod
+    def _wecom_image_payload(path: Path) -> Dict:
+        if not path.is_file():
+            raise FileNotFoundError(f"收益曲线图片不存在: {path}")
+        content = path.read_bytes()
+        if not content.startswith(b"\x89PNG\r\n\x1a\n"):
+            raise ValueError("企业微信收益曲线必须是有效 PNG 文件")
+        if len(content) > 2 * 1024 * 1024:
+            raise ValueError("企业微信机器人图片不能超过 2MB")
+        return {
+            "msgtype": "image",
+            "image": {
+                "base64": base64.b64encode(content).decode("ascii"),
+                "md5": hashlib.md5(content).hexdigest(),
+            },
+        }
 
     @staticmethod
     def _compact_message(
@@ -102,6 +136,25 @@ class NotificationService:
                 ))
             for warning in paper.get("warnings", [])[:2]:
                 lines.append(f"> 模拟盘提示：{warning}")
+        hedge = strategy_signal.get("index_hedge") or {}
+        if hedge:
+            lines.extend([
+                "",
+                "### CSI300 指数对冲模拟盘",
+                f"> **组合净值 {hedge.get('nav', 0):,.2f}**｜股票净值 {hedge.get('stock_nav', 0):,.2f}｜对冲累计损益 {hedge.get('hedge_equity', 0):+,.2f}",
+                f"> 当前已生效 {hedge.get('active_hedge_ratio', 0):.0%}｜**下一交易日目标 {hedge.get('target_hedge_ratio', 0):.0%}**｜今日对冲损益 {hedge.get('hedge_pnl_today', 0):+,.2f}",
+                f"> CSI300 {hedge.get('index_close', 0):.2f}｜MA{hedge.get('parameters', {}).get('lookback', 120)} {hedge.get('index_ma', 0):.2f}｜趋势比 {hedge.get('index_trend_ratio', 0):.4f}",
+                f"> {hedge.get('action_label', '--')}；信号收盘生成、下一交易日开盘执行。",
+                "> 仅记录股指期货代理模拟，不连接券商；未计基差、保证金、展期和融资成本。",
+            ])
+        curve = strategy_signal.get("paper_curve") or {}
+        if curve:
+            lines.extend([
+                "",
+                "### 模拟盘收益曲线",
+                f"> 前向观察 {curve.get('observations', 0)} 日｜累计收益 {curve.get('composite_return', 0):+.2%}｜最大回撤 {curve.get('max_drawdown', 0):.2%}",
+                "> 收益曲线图片随本消息单独发送；仅统计新模拟盘每日快照，不回填历史回测。",
+            ])
         decision = strategy_signal.get("decision") or {}
         if decision:
             action = decision.get("action_label", "继续持有")

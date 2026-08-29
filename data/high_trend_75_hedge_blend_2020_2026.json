@@ -1,0 +1,175 @@
+{
+  "generated_at": "2026-08-29T22:00:17.817088+08:00",
+  "status": "historical_diagnostic_only_not_deployed",
+  "window": [
+    "2020-01-02",
+    "2026-08-25"
+  ],
+  "selected": {
+    "trend_expert_weight": 0.75,
+    "formal_lgbm_weight": 0.25,
+    "trend_expert_csi300_maximum_hedge": 0.75,
+    "sleeve_rebalance": "none; each sleeve compounds independently",
+    "selection_reason": "highest Sharpe in the fixed 55%-90% trend-weight scan"
+  },
+  "metrics": {
+    "high_trend_blend": {
+      "terminal_value": 8.619782453825,
+      "total_return": 7.619782453825,
+      "annual_return": 0.40066609977551315,
+      "sharpe": 1.2054887206000995,
+      "max_drawdown": -0.2889740002382889,
+      "observations": 1611
+    },
+    "previous_50_50_blend": {
+      "terminal_value": 8.1233874929,
+      "total_return": 7.123387492899999,
+      "annual_return": 0.38773089039330033,
+      "sharpe": 1.1834072304110135,
+      "max_drawdown": -0.31195738524073136,
+      "observations": 1611
+    },
+    "risk_focused_90_10": {
+      "terminal_value": 8.93162596511,
+      "total_return": 7.931625965109999,
+      "annual_return": 0.4084742428766166,
+      "sharpe": 1.2009292851494449,
+      "max_drawdown": -0.282625893422384,
+      "observations": 1611
+    },
+    "pure_trend_hedge75": {
+      "terminal_value": 9.1395216393,
+      "total_return": 8.1395216393,
+      "annual_return": 0.4135528496839558,
+      "sharpe": 1.1944389407225104,
+      "max_drawdown": -0.2902569587778575,
+      "observations": 1611
+    },
+    "formal_lgbm": {
+      "terminal_value": 7.0605648974,
+      "total_return": 6.0605648974,
+      "annual_return": 0.3576235260081775,
+      "sharpe": 1.1055894039307212,
+      "max_drawdown": -0.32071453431781394,
+      "observations": 1611
+    }
+  },
+  "weight_scan": [
+    {
+      "trend_weight": 0.55,
+      "lgbm_weight": 0.44999999999999996,
+      "terminal_value": 8.203991105444999,
+      "total_return": 7.203991105444999,
+      "annual_return": 0.38987584073203774,
+      "sharpe": 1.2002706770920357,
+      "max_drawdown": -0.29743814265949564,
+      "observations": 1611
+    },
+    {
+      "trend_weight": 0.6,
+      "lgbm_weight": 0.4,
+      "terminal_value": 8.30793894254,
+      "total_return": 7.30793894254,
+      "annual_return": 0.39261591352398684,
+      "sharpe": 1.2028952108136763,
+      "max_drawdown": -0.2953221070541939,
+      "observations": 1611
+    },
+    {
+      "trend_weight": 0.65,
+      "lgbm_weight": 0.35,
+      "terminal_value": 8.411886779635001,
+      "total_return": 7.411886779635001,
+      "annual_return": 0.3953272166846946,
+      "sharpe": 1.2046168694385686,
+      "max_drawdown": -0.2932060714488922,
+      "observations": 1611
+    },
+    {
+      "trend_weight": 0.7,
+      "lgbm_weight": 0.30000000000000004,
+      "terminal_value": 8.51583461673,
+      "total_return": 7.51583461673,
+      "annual_return": 0.3980104022593751,
+      "sharpe": 1.2054694057014392,
+      "max_drawdown": -0.2910900358435906,
+      "observations": 1611
+    },
+    {
+      "trend_weight": 0.75,
+      "lgbm_weight": 0.25,
+      "terminal_value": 8.619782453825,
+      "total_return": 7.619782453825,
+      "annual_return": 0.40066609977551315,
+      "sharpe": 1.2054887206000995,
+      "max_drawdown": -0.2889740002382889,
+      "observations": 1611
+    },
+    {
+      "trend_weight": 0.8,
+      "lgbm_weight": 0.19999999999999996,
+      "terminal_value": 8.723730290919999,
+      "total_return": 7.723730290919999,
+      "annual_return": 0.40329491728136047,
+      "sharpe": 1.2047124162900142,
+      "max_drawdown": -0.2868579646329873,
+      "observations": 1611
+    },
+    {
+      "trend_weight": 0.85,
+      "lgbm_weight": 0.15000000000000002,
+      "terminal_value": 8.827678128015,
+      "total_return": 7.827678128015,
+      "annual_return": 0.4058974423247941,
+      "sharpe": 1.2031793627906275,
+      "max_drawdown": -0.2847419290276856,
+      "observations": 1611
+    },
+    {
+      "trend_weight": 0.9,
+      "lgbm_weight": 0.09999999999999998,
+      "terminal_value": 8.93162596511,
+      "total_return": 7.931625965109999,
+      "annual_return": 0.4084742428766166,
+      "sharpe": 1.2009292851494449,
+      "max_drawdown": -0.282625893422384,
+      "observations": 1611
+    }
+  ],
+  "best_scanned_sharpe": {
+    "trend_weight": 0.75,
+    "lgbm_weight": 0.25,
+    "terminal_value": 8.619782453825,
+    "total_return": 7.619782453825,
+    "annual_return": 0.40066609977551315,
+    "sharpe": 1.2054887206000995,
+    "max_drawdown": -0.2889740002382889,
+    "observations": 1611
+  },
+  "best_scanned_drawdown": {
+    "trend_weight": 0.9,
+    "lgbm_weight": 0.09999999999999998,
+    "terminal_value": 8.93162596511,
+    "total_return": 7.931625965109999,
+    "annual_return": 0.4084742428766166,
+    "sharpe": 1.2009292851494449,
+    "max_drawdown": -0.282625893422384,
+    "observations": 1611
+  },
+  "selected_minus_previous": {
+    "annual_return": 0.01293520938221282,
+    "sharpe": 0.022081490189086006,
+    "max_drawdown": 0.022983385002442458
+  },
+  "production_change": false,
+  "artifacts": {
+    "csv": "reports\\high_trend_75_hedge_blend_2020_2026.csv",
+    "png": "reports\\high_trend_75_hedge_blend_2020_2026.png",
+    "html": "C:\\Users\\fyq\\AppData\\Local\\Temp\\codex-visualizations\\high-trend-75-hedge-blend-2020-2026.html"
+  },
+  "limitations": [
+    "All curves are repeatedly revealed historical diagnostics, not fresh out-of-sample evidence.",
+    "The underlying strategy curves already include their modeled stock and hedge costs.",
+    "No extra cross-sleeve transfer cost is modeled because sleeve weights are not rebalanced after inception."
+  ]
+}

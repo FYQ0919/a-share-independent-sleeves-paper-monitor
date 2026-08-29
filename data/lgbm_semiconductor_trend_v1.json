@@ -1,0 +1,183 @@
+{
+  "generated_at": "2026-08-29T19:16:11.761444",
+  "status": "historical_diagnostic_only_not_deployed",
+  "strategy": "current LGBM plus fixed semiconductor-equipment trend expert",
+  "universe_snapshot_run_id": "20260826213839-f0b316",
+  "equipment_codes": [
+    "688037",
+    "688120",
+    "688200",
+    "688630"
+  ],
+  "execution_contract": "close signal; next-open execution; Top5 equal weight; 10-session rebalance; 12bp one-way stock cost",
+  "overlay": {
+    "strong_regime": "at least 3 equipment names; 20-day positive breadth >= 75%; equipment median 20/60-day return above frozen-pool median",
+    "strong_score": "60% blended LGBM + 20% defensive rule + 20% trend expert",
+    "normal_score": "60% blended LGBM + 40% defensive rule",
+    "strong_max_replacements": 2,
+    "normal_max_replacements": 1,
+    "trend_expert": "75% x (45% ret20 rank + 35% ret60 rank + 20% amount expansion rank) + 25% equipment membership in strong regime"
+  },
+  "model_audit": {
+    "alpha158_lite_refits": 80,
+    "alpha158_barra_refits": 80,
+    "first_base_refit": {
+      "month": "2020-01",
+      "prediction_start": "2020-01-02",
+      "max_training_label_end_date": "2019-12-31",
+      "gap_sessions": 11,
+      "training_rows": 27684,
+      "training_dates": 786,
+      "group_count": 786,
+      "max_relevance": 4
+    },
+    "last_base_refit": {
+      "month": "2026-08",
+      "prediction_start": "2026-08-03",
+      "max_training_label_end_date": "2026-07-31",
+      "gap_sessions": 11,
+      "training_rows": 100568,
+      "training_dates": 2380,
+      "group_count": 2380,
+      "max_relevance": 4
+    },
+    "all_base_labels_strictly_mature": true,
+    "all_barra_labels_strictly_mature": true
+  },
+  "strong_equipment_signal_events": 40,
+  "summaries": {
+    "current_lgbm": {
+      "2020_2023": {
+        "total_return": 0.6134828187267991,
+        "annual_return": 0.13248274700642537,
+        "sharpe": 0.5773133039734358,
+        "max_drawdown": -0.32071453425581375,
+        "annual_turnover": 10.783309920856892
+      },
+      "2024_2025": {
+        "total_return": 1.9667443993873186,
+        "annual_return": 0.7595066538187636,
+        "sharpe": 1.635731894909192,
+        "max_drawdown": -0.186700899324727,
+        "annual_turnover": 11.010166858819991
+      },
+      "2026_ytd": {
+        "total_return": 0.47501002787083113,
+        "annual_return": 0.8735651621200058,
+        "sharpe": 2.246329137315857,
+        "max_drawdown": -0.12126962979083145,
+        "annual_turnover": 10.36288838236413
+      },
+      "2026_june": {
+        "total_return": 0.048851957784169286,
+        "annual_return": 0.7269178060750756,
+        "sharpe": 1.7522190845025194,
+        "max_drawdown": -0.04791990834010318,
+        "annual_turnover": 9.743870766697247
+      },
+      "full": {
+        "total_return": 6.060564897371973,
+        "annual_return": 0.3578813604664506,
+        "sharpe": 1.1059343673552389,
+        "max_drawdown": -0.32071453425581375,
+        "annual_turnover": 10.810770254974809
+      }
+    },
+    "trend_expert_nocap": {
+      "2020_2023": {
+        "total_return": 0.3184731777846066,
+        "annual_return": 0.07454837701256811,
+        "sharpe": 0.3875308215286285,
+        "max_drawdown": -0.35423452712550485,
+        "annual_turnover": 12.288586653278829
+      },
+      "2024_2025": {
+        "total_return": 2.0505513904483013,
+        "annual_return": 0.7851593794123004,
+        "sharpe": 1.6179812738590884,
+        "max_drawdown": -0.22995516190036303,
+        "annual_turnover": 13.703050402204354
+      },
+      "2026_ytd": {
+        "total_return": 1.2658701595693285,
+        "annual_return": 2.7483590629261996,
+        "sharpe": 2.85796972123163,
+        "max_drawdown": -0.28967863055930554,
+        "annual_turnover": 17.16704176317291
+      },
+      "2026_june": {
+        "total_return": 0.41938526689762345,
+        "annual_return": 54.23822561372147,
+        "sharpe": 6.806493355067004,
+        "max_drawdown": -0.05929485943008306,
+        "annual_turnover": 18.289621051753876
+      },
+      "full": {
+        "total_return": 8.113488813606196,
+        "annual_return": 0.41322565485483986,
+        "sharpe": 1.1294512762895026,
+        "max_drawdown": -0.35423452712550485,
+        "annual_turnover": 13.192169590653073
+      }
+    },
+    "trend_expert_cap2": {
+      "2020_2023": {
+        "total_return": 0.004481939612789532,
+        "annual_return": 0.0011636540842940857,
+        "sharpe": 0.14363620964957347,
+        "max_drawdown": -0.2956716029117139,
+        "annual_turnover": 12.20890253829379
+      },
+      "2024_2025": {
+        "total_return": 1.2510749846591795,
+        "annual_return": 0.5243948213157925,
+        "sharpe": 1.2836317826449304,
+        "max_drawdown": -0.1815658823321158,
+        "annual_turnover": 13.609833088753055
+      },
+      "2026_ytd": {
+        "total_return": 0.9243115127381485,
+        "annual_return": 1.8788170913712854,
+        "sharpe": 2.781495161980258,
+        "max_drawdown": -0.20019102765664365,
+        "annual_turnover": 17.29350297475985
+      },
+      "2026_june": {
+        "total_return": 0.20598010947545697,
+        "annual_return": 7.54504565570296,
+        "sharpe": 5.316786930007772,
+        "max_drawdown": -0.0400328693292461,
+        "annual_turnover": 18.80207051679356
+      },
+      "full": {
+        "total_return": 3.3511842383724373,
+        "annual_return": 0.2587977333704943,
+        "sharpe": 0.8620296385107389,
+        "max_drawdown": -0.2991549057880942,
+        "annual_turnover": 13.128528577407558
+      }
+    }
+  },
+  "gate": {
+    "passed": false,
+    "checks": {
+      "baseline_replay_exact": true,
+      "annual_return_retained": false,
+      "drawdown_not_worse": true,
+      "sharpe_not_lower": false
+    }
+  },
+  "baseline_replay_max_daily_error": 3.469446951953614e-18,
+  "artifacts": {
+    "curves": "reports\\lgbm_semiconductor_trend_v1_curves.csv",
+    "rebalances": "reports\\lgbm_semiconductor_trend_v1_rebalances.csv"
+  },
+  "production_change": false,
+  "warnings": [
+    "688825 历史数据不足，已跳过",
+    "The frozen current Top50 is backfilled and has constituent and survivorship bias.",
+    "The equipment code map is static and incomplete; most equipment leaders are outside the frozen Top50.",
+    "The 2020-2026 interval and June 2026 episode were already revealed, so this is not fresh out-of-sample evidence.",
+    "No parameter was selected from 2026 outcomes, but the research hypothesis was prompted by the revealed June episode."
+  ]
+}

@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light">
+  <title>量研台｜多因子挖掘</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600&family=Noto+Sans+SC:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/static/styles.css">
+  <script src="https://unpkg.com/lucide@0.468.0/dist/umd/lucide.min.js" defer></script>
+  <script src="https://cdn.jsdelivr.net/npm/echarts@5.6.0/dist/echarts.min.js" defer></script>
+  <script src="/static/factor_mining.js?v=20260828c" defer></script>
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand-block">
+      <div class="brand-mark" aria-hidden="true">Q</div>
+      <div><h1>量研台</h1><p>A股选股与每日研报</p></div>
+    </div>
+    <nav class="primary-nav" aria-label="主导航">
+      <a href="/"><i data-lucide="list-filter"></i><span>选股研报</span></a>
+      <a href="/paper-monitor"><i data-lucide="activity"></i><span>模拟盘</span></a>
+      <a href="/backtest"><i data-lucide="chart-no-axes-combined"></i><span>策略回测</span></a>
+      <a class="active" href="/factor-mining"><i data-lucide="pickaxe"></i><span>因子挖掘</span></a>
+    </nav>
+    <div class="topbar-actions">
+      <button class="icon-button" id="update-factors" type="button" title="立即更新新因子" aria-label="立即更新新因子"><i data-lucide="refresh-cw"></i></button>
+      <div class="market-state"><span class="status-dot" id="mining-status-dot"></span><span id="mining-status">载入中</span></div>
+    </div>
+  </header>
+
+  <main>
+    <section class="summary-band">
+      <div class="summary-grid mining-summary-grid">
+        <div class="metric"><span>候选因子</span><strong id="factor-count">--</strong><small id="factor-count-detail">个</small></div>
+        <div class="metric"><span>稳定入选</span><strong id="selected-count">--</strong><small id="selected-count-detail">个</small></div>
+        <div class="metric"><span>选择集年化</span><strong id="selection-annual">--</strong><small>因子组合</small></div>
+        <div class="metric"><span>选择集夏普</span><strong id="selection-sharpe">--</strong><small>成本后</small></div>
+        <div class="metric wide"><span>研究门禁</span><strong id="gate-status">--</strong><small id="generated-at">--</small><small id="registry-version">--</small></div>
+      </div>
+    </section>
+
+    <section class="workspace-section">
+      <div class="section-heading">
+        <div><span class="eyebrow">STABILITY</span><h2>发现集与选择集 IC</h2></div>
+        <span class="method-tag">诊断集不参与筛选</span>
+      </div>
+      <div class="mining-chart-grid">
+        <div class="mining-chart" id="ic-scatter" role="img" aria-label="发现集和选择集因子IC散点图"></div>
+        <div class="mining-chart" id="family-chart" role="img" aria-label="入选因子类别分布图"></div>
+      </div>
+      <div class="warning-strip" id="mining-warnings" hidden></div>
+    </section>
+
+    <section class="metrics-band">
+      <div class="metrics-inner">
+        <div class="section-heading">
+          <div><span class="eyebrow">EXECUTION</span><h2>可成交组合评测</h2></div>
+          <span class="method-tag">Top5 · 次日开盘 · 10日调仓 · 单边12bp</span>
+        </div>
+        <div class="performance-grid mining-performance" id="portfolio-performance"></div>
+      </div>
+    </section>
+
+    <section class="workspace-section">
+      <div class="section-heading">
+        <div><span class="eyebrow">FACTORS</span><h2>因子诊断</h2></div>
+        <span class="method-tag" id="factor-window-label">--</span>
+      </div>
+      <div class="candidate-tabs" role="group" aria-label="因子范围">
+        <button type="button" class="candidate-tab active" data-filter="all">全部</button>
+        <button type="button" class="candidate-tab" data-filter="selected">仅入选</button>
+        <button type="button" class="candidate-tab" data-filter="rejected">仅淘汰</button>
+      </div>
+      <div class="table-shell factor-table-shell">
+        <table>
+          <thead><tr><th>因子</th><th>类别</th><th>发现 IC</th><th>选择 IC</th><th>诊断 IC</th><th>方向命中</th><th>稳定分</th><th>相关性</th><th>结论</th></tr></thead>
+          <tbody id="factor-table-body"></tbody>
+        </table>
+      </div>
+    </section>
+  </main>
+</body>
+</html>

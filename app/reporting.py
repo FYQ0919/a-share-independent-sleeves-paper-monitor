@@ -152,6 +152,32 @@ class ReportGenerator:
                 lines.append("- 尚未建仓，等待上一收盘信号在下一交易日开盘执行。")
             for warning in paper.get("warnings", []):
                 lines.append(f"- 模拟盘提示：{warning}")
+        hedge = strategy_signal.get("index_hedge") or {}
+        if hedge:
+            lines.extend([
+                "",
+                "## CSI300 指数对冲模拟盘",
+                "",
+                f"- 组合净值：{hedge.get('nav', 0):,.2f}",
+                f"- 股票净值 / 对冲累计损益：{hedge.get('stock_nav', 0):,.2f} / {hedge.get('hedge_equity', 0):+,.2f}",
+                f"- 当前已生效 / 下一交易日目标：{hedge.get('active_hedge_ratio', 0):.0%} / {hedge.get('target_hedge_ratio', 0):.0%}",
+                f"- CSI300 / MA{hedge.get('parameters', {}).get('lookback', 120)}：{hedge.get('index_close', 0):.2f} / {hedge.get('index_ma', 0):.2f}",
+                f"- 对冲动作：{hedge.get('action_label', '--')}",
+                "- 执行口径：收盘生成信号，下一交易日开盘执行，开盘到下一开盘计损益；仅为股指期货代理模拟。",
+                "- 未计入基差、保证金、展期和融资成本，不连接券商。",
+            ])
+        curve = strategy_signal.get("paper_curve") or {}
+        if curve:
+            lines.extend([
+                "",
+                "## 模拟盘收益曲线",
+                "",
+                f"- 前向观察日：{curve.get('observations', 0)}",
+                f"- 累计收益：{curve.get('composite_return', 0):+.2%}",
+                f"- 最大回撤：{curve.get('max_drawdown', 0):.2%}",
+                f"- 图片：`{curve.get('image_path', '--')}`",
+                "- 口径：只统计新模拟盘每日净值，不使用历史回测数据回填。",
+            ])
         if decision:
             lines.extend([
                 "",

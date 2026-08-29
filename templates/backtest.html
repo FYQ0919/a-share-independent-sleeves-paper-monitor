@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light">
+  <title>量研台｜选股回测</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600&family=Noto+Sans+SC:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/static/styles.css">
+  <script src="https://unpkg.com/lucide@0.468.0/dist/umd/lucide.min.js" defer></script>
+  <script src="https://cdn.jsdelivr.net/npm/echarts@5.6.0/dist/echarts.min.js" defer></script>
+  <script src="/static/backtest.js?v=20260827" defer></script>
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand-block">
+      <div class="brand-mark" aria-hidden="true">Q</div>
+      <div><h1>量研台</h1><p>A股选股与每日研报</p></div>
+    </div>
+    <nav class="primary-nav" aria-label="主导航">
+      <a href="/"><i data-lucide="list-filter"></i><span>选股研报</span></a>
+      <a href="/paper-monitor"><i data-lucide="activity"></i><span>模拟盘</span></a>
+      <a class="active" href="/backtest"><i data-lucide="chart-no-axes-combined"></i><span>策略回测</span></a>
+      <a href="/factor-mining"><i data-lucide="pickaxe"></i><span>因子挖掘</span></a>
+    </nav>
+    <div class="topbar-actions"><div class="market-state"><span class="status-dot"></span><span id="backtest-status">待运行</span></div></div>
+  </header>
+
+  <main>
+    <section class="backtest-control-band">
+      <form class="backtest-form" id="backtest-form">
+        <div class="form-heading">
+          <div><span class="eyebrow">CONFIGURATION</span><h2>回测参数</h2></div>
+          <div class="segmented" role="group" aria-label="历史数据模式">
+            <button type="button" class="segment active" data-mode="demo">演示数据</button>
+            <button type="button" class="segment" data-mode="live">真实历史</button>
+          </div>
+        </div>
+        <div class="form-grid">
+          <label><span>开始日期</span><input type="date" id="start-date" required></label>
+          <label><span>结束日期</span><input type="date" id="end-date" required></label>
+          <label><span>持仓数量</span><input type="number" id="top-n" min="1" max="30" value="5" required></label>
+          <label><span>调仓周期</span><select id="rebalance-days"><option value="5">每周</option><option value="10" selected>双周</option><option value="20">每月</option><option value="40">双月</option><option value="60">每季</option></select></label>
+          <label><span>初始资金</span><input type="number" id="initial-capital" min="10000" step="10000" value="1000000" required></label>
+          <label><span>单边成本（bp）</span><input type="number" id="cost-bps" min="0" max="100" step="1" value="12" required></label>
+          <label><span>策略模型</span><select id="strategy"><option value="contrarian" selected>逆向增强</option><option value="multi_factor">原始多因子</option></select></label>
+          <label><span>调仓机制</span><select id="rebalance-policy"><option value="adaptive" selected>每日自适应</option><option value="fixed">固定周期</option></select></label>
+          <label><span>回撤风控</span><select id="risk-overlay"><option value="adaptive">自适应覆盖</option><option value="balanced">均衡覆盖</option><option value="trend_volatility" selected>保守覆盖</option><option value="none">关闭</option></select></label>
+          <label><span>组合熔断回撤</span><select id="drawdown-limit"><option value="0.20">20%</option><option value="0.25" selected>25%</option><option value="0.30">30%</option><option value="0">关闭</option></select></label>
+          <label><span>冷静期（交易日）</span><input type="number" id="drawdown-cooldown" min="1" max="60" value="10" required></label>
+          <label class="adaptive-only"><span>最少持有天数</span><input type="number" id="min-hold-days" min="1" max="20" value="5" required></label>
+          <label class="adaptive-only"><span>持仓排名缓冲</span><input type="number" id="rank-buffer" min="5" max="50" value="20" required></label>
+          <label class="adaptive-only"><span>提前换股分差</span><input type="number" id="score-gap" min="0" max="50" step="1" value="15" required></label>
+          <label class="universe-field"><span>股票池</span><textarea id="stock-codes" rows="3" placeholder="600036, 000651, 601919"></textarea><small id="universe-count">0 只</small></label>
+          <button type="submit" class="button primary run-backtest" id="run-backtest"><i data-lucide="play"></i><span>开始回测</span></button>
+        </div>
+      </form>
+    </section>
+
+    <section class="summary-band backtest-summary">
+      <div class="summary-grid backtest-metrics">
+        <div class="metric"><span>累计收益</span><strong id="bt-total-return">--</strong><small>策略</small></div>
+        <div class="metric"><span>年化收益</span><strong id="bt-annual-return">--</strong><small>复合</small></div>
+        <div class="metric"><span>最大回撤</span><strong id="bt-max-drawdown">--</strong><small>峰谷</small></div>
+        <div class="metric"><span>夏普比率</span><strong id="bt-sharpe">--</strong><small>无风险利率 0</small></div>
+        <div class="metric wide"><span>期末资产</span><strong id="bt-final-capital">--</strong><small id="bt-period">尚未运行</small></div>
+      </div>
+    </section>
+
+    <section class="workspace-section">
+      <div class="section-heading">
+        <div><span class="eyebrow">PERFORMANCE</span><h2>净值与回撤</h2></div>
+        <span class="method-tag" id="execution-label">收盘信号 · 次日开盘生效</span>
+      </div>
+      <div class="chart-frame" id="equity-chart" aria-label="策略净值和回撤图"></div>
+      <div class="warning-strip" id="backtest-warnings" hidden></div>
+    </section>
+
+    <section class="metrics-band">
+      <div class="metrics-inner">
+        <div class="section-heading"><div><span class="eyebrow">RISK & RETURN</span><h2>绩效指标</h2></div><span class="method-tag">基准：股票池每日等权</span></div>
+        <div class="performance-grid" id="performance-grid"></div>
+      </div>
+    </section>
+
+    <section class="workspace-section">
+      <div class="section-heading"><div><span class="eyebrow">REBALANCE</span><h2>调仓记录</h2></div><span class="method-tag" id="rebalance-summary">--</span></div>
+      <div class="table-shell backtest-table">
+        <table><thead><tr><th>信号日</th><th>执行日</th><th>触发原因</th><th>入选股票</th><th>权重</th></tr></thead><tbody id="rebalance-body"></tbody></table>
+      </div>
+    </section>
+
+    <section class="report-band">
+      <div class="report-inner">
+        <div class="section-heading"><div><span class="eyebrow">HISTORY</span><h2>历史回测</h2></div></div>
+        <div class="backtest-history" id="backtest-history"></div>
+      </div>
+    </section>
+  </main>
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+</body>
+</html>

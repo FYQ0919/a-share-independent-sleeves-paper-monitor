@@ -11,6 +11,9 @@ from app.models import Candidate, StrategyPick
 from app.adaptive_portfolio import AdaptivePortfolioService
 from app.lgbm_strategy import load_frozen_strategy_model
 from app.paper_account import LgbmPaperAccountService
+from app.index_hedge import CSI300HedgePaperService
+from app.sleeve_monitor import IndependentSleeveMonitorService
+from app.trend_expert import TrendExpertRanker, TrendPortfolioService
 
 
 class StrategySignalService:
@@ -24,6 +27,12 @@ class StrategySignalService:
         lgbm_model_dir=None,
         lgbm_history_days: int = 550,
         paper_account: LgbmPaperAccountService = None,
+        index_hedge: CSI300HedgePaperService = None,
+        trend_ranker: TrendExpertRanker = None,
+        trend_portfolio: TrendPortfolioService = None,
+        trend_paper_account: LgbmPaperAccountService = None,
+        trend_index_hedge: CSI300HedgePaperService = None,
+        sleeve_monitor: IndependentSleeveMonitorService = None,
     ):
         self.provider = BaoStockHistoryProvider(cache_dir)
         self.engine = BacktestEngine()
@@ -39,11 +48,21 @@ class StrategySignalService:
         self.lgbm_model_dir = lgbm_model_dir
         self.lgbm_model = None
         self.paper_account = paper_account
+        self.index_hedge = index_hedge
+        self.trend_ranker = trend_ranker
+        self.trend_portfolio = trend_portfolio
+        self.trend_paper_account = trend_paper_account
+        self.trend_index_hedge = trend_index_hedge
+        self.sleeve_monitor = sleeve_monitor
 
     def build(self, candidates: Sequence[Candidate], as_of: date) -> Tuple[List[StrategyPick], Dict, List[str]]:
         tracked = self.portfolio.tracked_symbols() if self.portfolio else {}
         if self.paper_account:
             tracked.update(self.paper_account.tracked_symbols())
+        if self.trend_portfolio:
+            tracked.update(self.trend_portfolio.tracked_symbols())
+        if self.trend_paper_account:
+            tracked.update(self.trend_paper_account.tracked_symbols())
         codes = list(dict.fromkeys([item.code for item in candidates] + list(tracked)))
         if len(codes) < 2:
             return [], {}, ["候选股票不足，未生成逆向增强 Top5"]
@@ -61,6 +80,62 @@ class StrategySignalService:
                 metadata["paper_account"] = self.paper_account.update(
                     metadata["decision"], history
                 )
+                if self.index_hedge:
+                    metadata["index_hedge"] = self.index_hedge.update(
+                        metadata["paper_account"], metadata["signal_date"]
+                    )
+                if all([
+                    self.trend_ranker,
+                    self.trend_portfolio,
+                    self.trend_paper_account,
+                    self.trend_index_hedge,
+                    self.sleeve_monitor,
+                ]):
+                    trend_rankings, trend_regime = self.trend_ranker.rank(
+                        rankings,
+                        history,
+                        date.fromisoformat(metadata["signal_date"]),
+                    )
+                    trend_decision = self.trend_portfolio.evaluate(
+                        trend_rankings,
+                        date.fromisoformat(metadata["signal_date"]),
+                        trading_dates,
+                        strong_equipment=bool(trend_regime["strong_equipment"]),
+                    )
+                    trend_stock = self.trend_paper_account.update(
+                        trend_decision, history
+                    )
+                    trend_hedged = self.trend_index_hedge.update(
+                        trend_stock, metadata["signal_date"]
+                    )
+                    metadata["trend_expert"] = {
+                        **trend_regime,
+                        "picks": [
+                            {
+                                "rank": item.rank,
+                                "code": item.code,
+                                "name": item.name,
+                                "score": item.score,
+                                "price": item.price,
+                                "target_weight": item.target_weight,
+                                "factor_scores": item.factor_scores,
+                                "reason": item.reason,
+                            }
+                            for item in trend_rankings[: self.top_n]
+                        ],
+                    }
+                    metadata["trend_decision"] = trend_decision
+                    metadata["trend_paper_account"] = trend_stock
+                    metadata["trend_index_hedge"] = trend_hedged
+                    metadata["paper_monitor"] = self.sleeve_monitor.update(
+                        signal_date=metadata["signal_date"],
+                        trend_stock=trend_stock,
+                        trend_hedged=trend_hedged,
+                        trend_decision=trend_decision,
+                        trend_regime=trend_regime,
+                        lgbm_stock=metadata["paper_account"],
+                        lgbm_decision=metadata["decision"],
+                    )
         elif self.strategy_backend == "lgbm_shadow":
             metadata["model_status"] = "shadow"
             metadata["decision"] = {

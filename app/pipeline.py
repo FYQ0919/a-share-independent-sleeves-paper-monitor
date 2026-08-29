@@ -11,10 +11,14 @@ from app.macro_environment import MacroEnvironmentService
 from app.models import Candidate, RunResult
 from app.notifications import NotificationService
 from app.paper_account import LgbmPaperAccountService
+from app.index_hedge import CSI300HedgeConfig, CSI300HedgePaperService
+from app.paper_curve import PaperEquityCurveService
 from app.reporting import ReportGenerator
 from app.selection import SelectionEngine
 from app.storage import Storage
 from app.strategy_signal import StrategySignalService
+from app.sleeve_monitor import IndependentSleeveMonitorService
+from app.trend_expert import TrendExpertRanker, TrendPortfolioService
 
 
 class ResearchPipeline:
@@ -44,14 +48,37 @@ class ResearchPipeline:
         blend_candidate = (
             settings.lgbm_model_version == "lgbm_new_factors_blend_v1_candidate"
         )
+        sleeves_enabled = bool(
+            settings.independent_sleeves_enabled
+            and settings.strategy_model_backend == "lgbm_active"
+        )
+        if sleeves_enabled and not blend_candidate:
+            raise ValueError("独立袖套模拟盘要求冻结的75/25 Alpha158-Barra LGBM模型")
+        if sleeves_enabled and abs(
+            settings.trend_sleeve_weight + settings.lgbm_sleeve_weight - 1.0
+        ) > 1e-9:
+            raise ValueError("趋势与LGBM袖套初始权重之和必须为1")
         protocol_id = (
             f"{settings.lgbm_model_version}_fixed10"
             if blend_candidate else settings.lgbm_model_version
         )
+        if (
+            settings.index_hedge_enabled
+            and settings.strategy_model_backend == "lgbm_active"
+            and not sleeves_enabled
+        ):
+            hedge_percent = int(round(settings.index_hedge_ratio * 100))
+            protocol_id = f"{protocol_id}_csi300_hedged{hedge_percent}"
+        if sleeves_enabled:
+            protocol_id = f"{protocol_id}_trend75_lgbm25_sleeves"
+        formal_capital = (
+            settings.paper_initial_capital * settings.lgbm_sleeve_weight
+            if sleeves_enabled else settings.paper_initial_capital
+        )
         self.paper_account = (
             LgbmPaperAccountService(
                 storage,
-                initial_capital=settings.paper_initial_capital,
+                initial_capital=formal_capital,
                 cost_bps=settings.paper_cost_bps,
                 lot_size=settings.paper_lot_size,
                 account_id=f"{protocol_id}_paper_account_v1",
@@ -74,6 +101,81 @@ class ResearchPipeline:
             strategy_label=(lgbm_label if lgbm_enabled else "逆向增强 Top5"),
             adaptive_enabled=not blend_candidate,
         )
+        self.index_hedge = (
+            CSI300HedgePaperService(
+                storage,
+                settings.cache_dir / "index" / "csi300_live_ohlc.csv",
+                account_id=f"{protocol_id}_hedge_overlay_v1",
+                initial_capital=settings.paper_initial_capital,
+                config=CSI300HedgeConfig(
+                    lookback=settings.index_hedge_lookback,
+                    threshold=settings.index_hedge_threshold,
+                    hedge_ratio=settings.index_hedge_ratio,
+                    change_cost_bps=settings.index_hedge_cost_bps,
+                ),
+            )
+            if settings.index_hedge_enabled
+            and settings.strategy_model_backend == "lgbm_active"
+            and not sleeves_enabled
+            else None
+        )
+        self.trend_portfolio = (
+            TrendPortfolioService(
+                storage,
+                top_n=settings.strategy_top_n,
+                rebalance_days=settings.strategy_rebalance_days,
+                strategy_id=f"{protocol_id}_trend_portfolio_v1",
+            )
+            if sleeves_enabled else None
+        )
+        self.trend_paper_account = (
+            LgbmPaperAccountService(
+                storage,
+                initial_capital=(
+                    settings.paper_initial_capital * settings.trend_sleeve_weight
+                ),
+                cost_bps=settings.paper_cost_bps,
+                lot_size=settings.paper_lot_size,
+                account_id=f"{protocol_id}_trend_paper_account_v1",
+                strategy_label="半导体设备趋势专家 Top5 模拟盘",
+            )
+            if sleeves_enabled else None
+        )
+        self.trend_index_hedge = (
+            CSI300HedgePaperService(
+                storage,
+                settings.cache_dir / "index" / "csi300_live_ohlc.csv",
+                account_id=f"{protocol_id}_trend_csi300_hedge_v1",
+                initial_capital=(
+                    settings.paper_initial_capital * settings.trend_sleeve_weight
+                ),
+                config=CSI300HedgeConfig(
+                    lookback=settings.index_hedge_lookback,
+                    threshold=settings.index_hedge_threshold,
+                    hedge_ratio=settings.trend_hedge_ratio,
+                    change_cost_bps=settings.index_hedge_cost_bps,
+                ),
+                strategy_label=(
+                    "半导体设备趋势专家 + "
+                    f"CSI300动态对冲{settings.trend_hedge_ratio:.0%}模拟盘"
+                ),
+            )
+            if sleeves_enabled else None
+        )
+        self.sleeve_monitor = (
+            IndependentSleeveMonitorService(
+                storage,
+                initial_capital=settings.paper_initial_capital,
+                trend_initial_weight=settings.trend_sleeve_weight,
+                lgbm_initial_weight=settings.lgbm_sleeve_weight,
+                account_id=f"{protocol_id}_monitor_v1",
+            )
+            if sleeves_enabled else None
+        )
+        self.paper_curve = (
+            PaperEquityCurveService(storage, settings.report_dir)
+            if self.paper_account else None
+        )
         self.strategy_signal = StrategySignalService(
             settings.cache_dir,
             top_n=settings.strategy_top_n,
@@ -83,6 +185,12 @@ class ResearchPipeline:
             lgbm_model_dir=settings.lgbm_model_dir,
             lgbm_history_days=settings.lgbm_history_days,
             paper_account=self.paper_account,
+            index_hedge=self.index_hedge,
+            trend_ranker=TrendExpertRanker() if sleeves_enabled else None,
+            trend_portfolio=self.trend_portfolio,
+            trend_paper_account=self.trend_paper_account,
+            trend_index_hedge=self.trend_index_hedge,
+            sleeve_monitor=self.sleeve_monitor,
         )
         self._lock = Lock()
 
@@ -114,6 +222,21 @@ class ResearchPipeline:
                         signal_candidates, now.date()
                     )
                     warnings.extend(signal_warnings)
+                    if self.paper_curve and strategy_signal.get("paper_account"):
+                        try:
+                            if self.sleeve_monitor and strategy_signal.get("paper_monitor"):
+                                strategy_signal["paper_curve"] = (
+                                    self.paper_curve.generate_independent_sleeves(
+                                        self.sleeve_monitor.account_id
+                                    )
+                                )
+                            else:
+                                strategy_signal["paper_curve"] = self.paper_curve.generate(
+                                    self.paper_account.account_id,
+                                    self.index_hedge.account_id if self.index_hedge else None,
+                                )
+                        except Exception as exc:
+                            warnings.append(f"模拟盘收益曲线生成失败: {exc}")
                     if signal_candidates is not candidates:
                         warnings.append("LGBM融合模拟盘使用模型元数据绑定的冻结Top50股票池")
                 except Exception as exc:
@@ -127,7 +250,11 @@ class ResearchPipeline:
             notifications = []
             if notify:
                 notification_title = (
-                    f"LGBM模拟盘日报｜{now.strftime('%Y-%m-%d')}"
+                    (
+                        f"CSI300对冲LGBM模拟盘｜{now.strftime('%Y-%m-%d')}"
+                        if self.index_hedge else
+                        f"LGBM模拟盘日报｜{now.strftime('%Y-%m-%d')}"
+                    )
                     if self.settings.strategy_model_backend == "lgbm_active"
                     else f"A股量化研究日报｜{now.strftime('%Y-%m-%d')}"
                 )
@@ -206,7 +333,11 @@ class ResearchPipeline:
         strategy_picks = [StrategyPick(**item) for item in latest.get("strategy_picks", [])]
         return self.notifier.send(
             title=(
-                f"LGBM模拟盘日报｜{latest['created_at'][:10]}"
+                (
+                    f"CSI300对冲LGBM模拟盘｜{latest['created_at'][:10]}"
+                    if latest.get("strategy_signal", {}).get("index_hedge")
+                    else f"LGBM模拟盘日报｜{latest['created_at'][:10]}"
+                )
                 if latest.get("strategy_signal", {}).get("paper_account")
                 else f"A股量化研究日报｜{latest['created_at'][:10]}"
             ),

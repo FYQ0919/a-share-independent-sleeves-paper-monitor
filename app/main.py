@@ -137,6 +137,11 @@ async def factor_mining_page(request: Request):
     return templates.TemplateResponse(request=request, name="factor_mining.html")
 
 
+@app.get("/paper-monitor", response_class=HTMLResponse)
+async def paper_monitor_page(request: Request):
+    return templates.TemplateResponse(request=request, name="paper_monitor.html")
+
+
 @app.get("/healthz")
 async def health():
     return {"ok": True, "version": app.version, "has_data": storage.latest() is not None}
@@ -154,6 +159,15 @@ async def dashboard():
         else f"{settings.lgbm_model_version}_paper_account_v1"
     )
     paper_account_state = storage.load_strategy_state(paper_account_id)
+    hedge_account_id = pipeline.index_hedge.account_id if pipeline.index_hedge else None
+    hedge_account_state = (
+        storage.load_strategy_state(hedge_account_id) if hedge_account_id else None
+    )
+    monitor_service = getattr(pipeline, "sleeve_monitor", None)
+    monitor_account_id = monitor_service.account_id if monitor_service else None
+    monitor_state = (
+        storage.load_strategy_state(monitor_account_id) if monitor_account_id else None
+    )
     return {
         "latest": latest,
         "settings": {
@@ -172,6 +186,11 @@ async def dashboard():
             "strategy_model_backend": settings.strategy_model_backend,
             "lgbm_model_version": settings.lgbm_model_version,
             "lgbm_universe_mode": settings.lgbm_universe_mode,
+            "index_hedge_enabled": settings.index_hedge_enabled,
+            "independent_sleeves_enabled": settings.independent_sleeves_enabled,
+            "trend_sleeve_weight": settings.trend_sleeve_weight,
+            "lgbm_sleeve_weight": settings.lgbm_sleeve_weight,
+            "trend_hedge_ratio": settings.trend_hedge_ratio,
             "lgbm_model_status": pipeline.strategy_signal.model_status(),
             "lgbm_research": _lgbm_research_status(),
         },
@@ -187,7 +206,95 @@ async def dashboard():
             "paper_history": storage.strategy_decision_history(
                 paper_account_id, 30
             ),
+            "index_hedge_account_id": hedge_account_id,
+            "index_hedge": (
+                hedge_account_state.get("last_snapshot")
+                if hedge_account_state else None
+            ),
+            "index_hedge_state": hedge_account_state,
+            "index_hedge_history": (
+                storage.strategy_decision_history(hedge_account_id, 30)
+                if hedge_account_id else []
+            ),
+            "paper_curve": (latest or {}).get("strategy_signal", {}).get(
+                "paper_curve"
+            ),
+            "paper_monitor_account_id": monitor_account_id,
+            "paper_monitor": (
+                monitor_state.get("last_snapshot") if monitor_state else None
+            ),
         },
+    }
+
+
+@app.get("/api/paper-monitor")
+async def paper_monitor(limit: int = 400):
+    monitor = getattr(pipeline, "sleeve_monitor", None)
+    if not monitor:
+        return {
+            "enabled": False,
+            "status": "disabled",
+            "message": "独立袖套模拟盘未启用",
+            "config": {
+                "trend_initial_weight": settings.trend_sleeve_weight,
+                "lgbm_initial_weight": settings.lgbm_sleeve_weight,
+                "trend_maximum_hedge": settings.trend_hedge_ratio,
+            },
+            "snapshot": None,
+            "history": [],
+        }
+    state = storage.load_strategy_state(monitor.account_id) or {}
+    rows = storage.strategy_decision_history(
+        monitor.account_id, min(max(int(limit), 1), 2_000)
+    )
+    history = []
+    for row in reversed(rows):
+        sleeves = row.get("sleeves") or {}
+        trend = sleeves.get("trend") or {}
+        lgbm = sleeves.get("lgbm") or {}
+        initial = float(row.get("initial_capital") or settings.paper_initial_capital)
+        trend_initial = float(
+            trend.get("initial_capital") or initial * settings.trend_sleeve_weight
+        )
+        lgbm_initial = float(
+            lgbm.get("initial_capital") or initial * settings.lgbm_sleeve_weight
+        )
+        history.append({
+            "date": row.get("signal_date"),
+            "nav": row.get("nav"),
+            "equity": float(row.get("nav", initial)) / initial,
+            "drawdown": row.get("drawdown", 0.0),
+            "trend_nav": trend.get("nav"),
+            "trend_equity": float(trend.get("nav", trend_initial)) / trend_initial,
+            "lgbm_nav": lgbm.get("nav"),
+            "lgbm_equity": float(lgbm.get("nav", lgbm_initial)) / lgbm_initial,
+            "trend_actual_weight": trend.get("actual_weight"),
+            "lgbm_actual_weight": lgbm.get("actual_weight"),
+            "active_hedge_ratio": trend.get("active_hedge_ratio", 0.0),
+            "target_hedge_ratio": trend.get("target_hedge_ratio", 0.0),
+        })
+    latest = storage.latest() or {}
+    curve = (latest.get("strategy_signal") or {}).get("paper_curve")
+    return {
+        "enabled": True,
+        "status": "active" if state.get("last_snapshot") else "awaiting_first_signal",
+        "account_id": monitor.account_id,
+        "config": {
+            "initial_capital": settings.paper_initial_capital,
+            "trend_initial_weight": settings.trend_sleeve_weight,
+            "lgbm_initial_weight": settings.lgbm_sleeve_weight,
+            "trend_maximum_hedge": settings.trend_hedge_ratio,
+            "hedge_lookback": settings.index_hedge_lookback,
+            "rebalance_days": settings.strategy_rebalance_days,
+            "top_n": settings.strategy_top_n,
+            "stock_cost_bps_one_way": settings.paper_cost_bps,
+            "hedge_change_cost_bps": settings.index_hedge_cost_bps,
+            "promotion_required_sessions": 126,
+            "forward_start_after": "2026-08-25",
+        },
+        "snapshot": state.get("last_snapshot"),
+        "history": history,
+        "curve": curve,
     }
 
 

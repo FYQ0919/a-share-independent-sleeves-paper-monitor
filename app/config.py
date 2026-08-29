@@ -1,7 +1,7 @@
 from dataclasses import dataclass, field
 from pathlib import Path
 import os
-from typing import Dict
+from typing import Dict, Tuple
 
 from dotenv import load_dotenv
 
@@ -25,6 +25,14 @@ def _int(name: str, default: int) -> int:
 def _float(name: str, default: float) -> float:
     value = os.getenv(name, "").strip()
     return float(value) if value else default
+
+
+def _csv(name: str) -> Tuple[str, ...]:
+    return tuple(
+        item.strip()
+        for item in os.getenv(name, "").split(",")
+        if item.strip()
+    )
 
 
 def _lgbm_model_dir() -> Path:
@@ -82,6 +90,22 @@ class Settings:
     feishu_webhook_url: str = os.getenv("FEISHU_WEBHOOK_URL", "")
     wecom_webhook_url: str = os.getenv("WECOM_WEBHOOK_URL", "")
     generic_webhook_url: str = os.getenv("GENERIC_WEBHOOK_URL", "")
+    feishu_web_login_enabled: bool = _bool("FEISHU_WEB_LOGIN_ENABLED", False)
+    feishu_app_id: str = os.getenv("FEISHU_APP_ID", "").strip()
+    feishu_app_secret: str = os.getenv("FEISHU_APP_SECRET", "").strip()
+    feishu_redirect_uri: str = os.getenv("FEISHU_REDIRECT_URI", "").strip()
+    feishu_allowed_open_ids: Tuple[str, ...] = field(
+        default_factory=lambda: _csv("FEISHU_ALLOWED_OPEN_IDS")
+    )
+    feishu_allowed_tenant_keys: Tuple[str, ...] = field(
+        default_factory=lambda: _csv("FEISHU_ALLOWED_TENANT_KEYS")
+    )
+    feishu_allow_any_authenticated: bool = _bool(
+        "FEISHU_ALLOW_ANY_AUTHENTICATED", False
+    )
+    session_secret: str = os.getenv("SESSION_SECRET", "").strip()
+    session_max_age_seconds: int = _int("SESSION_MAX_AGE_SECONDS", 43_200)
+    session_cookie_secure: bool = _bool("SESSION_COOKIE_SECURE", True)
     smtp_host: str = os.getenv("SMTP_HOST", "")
     smtp_port: int = _int("SMTP_PORT", 465)
     smtp_username: str = os.getenv("SMTP_USERNAME", "")

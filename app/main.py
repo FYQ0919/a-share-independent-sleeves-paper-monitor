@@ -15,6 +15,7 @@ from app.pipeline import ResearchPipeline
 from app.paper_account import LgbmPaperAccountService
 from app.scheduler import build_scheduler
 from app.storage import Storage
+from app.web_auth import FeishuWebAuth
 
 
 storage = Storage(settings.database_path)
@@ -96,6 +97,8 @@ async def lifespan(_: FastAPI):
 app = FastAPI(title="量研台", version="0.1.0", lifespan=lifespan)
 app.mount("/static", StaticFiles(directory=BASE_DIR / "static"), name="static")
 templates = Jinja2Templates(directory=BASE_DIR / "templates")
+web_auth = FeishuWebAuth(settings, templates)
+web_auth.install(app)
 
 
 class RunRequest(BaseModel):
@@ -124,27 +127,49 @@ class BacktestRequest(BaseModel):
 
 @app.get("/", response_class=HTMLResponse)
 async def index(request: Request):
-    return templates.TemplateResponse(request=request, name="index.html")
+    return templates.TemplateResponse(
+        request=request,
+        name="index.html",
+        context={"web_login_enabled": settings.feishu_web_login_enabled},
+    )
 
 
 @app.get("/backtest", response_class=HTMLResponse)
 async def backtest_page(request: Request):
-    return templates.TemplateResponse(request=request, name="backtest.html")
+    return templates.TemplateResponse(
+        request=request,
+        name="backtest.html",
+        context={"web_login_enabled": settings.feishu_web_login_enabled},
+    )
 
 
 @app.get("/factor-mining", response_class=HTMLResponse)
 async def factor_mining_page(request: Request):
-    return templates.TemplateResponse(request=request, name="factor_mining.html")
+    return templates.TemplateResponse(
+        request=request,
+        name="factor_mining.html",
+        context={"web_login_enabled": settings.feishu_web_login_enabled},
+    )
 
 
 @app.get("/paper-monitor", response_class=HTMLResponse)
 async def paper_monitor_page(request: Request):
-    return templates.TemplateResponse(request=request, name="paper_monitor.html")
+    return templates.TemplateResponse(
+        request=request,
+        name="paper_monitor.html",
+        context={"web_login_enabled": settings.feishu_web_login_enabled},
+    )
 
 
 @app.get("/healthz")
 async def health():
-    return {"ok": True, "version": app.version, "has_data": storage.latest() is not None}
+    return {
+        "ok": True,
+        "version": app.version,
+        "has_data": storage.latest() is not None,
+        "web_login_enabled": web_auth.enabled,
+        "web_login_ready": web_auth.status.ready,
+    }
 
 
 @app.get("/api/dashboard")

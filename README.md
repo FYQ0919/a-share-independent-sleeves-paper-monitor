@@ -62,6 +62,7 @@ app/paper_account.py      next-open stock execution, lots, cash and cost ledger
 app/index_hedge.py        causal CSI300 MA120 hedge ledger
 app/sleeve_monitor.py     independent-sleeve aggregation without capital transfer
 app/paper_curve.py        forward-only CSV/JSON/PNG equity export
+app/web_auth.py           Feishu OAuth login and authorization guard
 app/main.py               FastAPI dashboard and read-only monitor API
 templates/paper_monitor.html
 static/paper_monitor.js
@@ -82,6 +83,40 @@ Open:
 
 ```text
 http://127.0.0.1:8765/paper-monitor
+```
+
+## Feishu login for shared access
+
+Use an HTTPS domain and a reverse proxy; keep Uvicorn bound to `127.0.0.1` instead of exposing port `8765` directly. Create a Feishu enterprise self-built web application and register this exact redirect URL:
+
+```text
+https://quant.example.com/auth/feishu/callback
+```
+
+Configure only the server-side `.env`; never commit the application secret or session key:
+
+```env
+FEISHU_WEB_LOGIN_ENABLED=true
+FEISHU_APP_ID=cli_xxxxxxxxxx
+FEISHU_APP_SECRET=server-local-secret
+FEISHU_REDIRECT_URI=https://quant.example.com/auth/feishu/callback
+SESSION_SECRET=at-least-32-random-characters
+SESSION_COOKIE_SECURE=true
+
+# Recommended: allow a tenant or selected comma-separated open_id values.
+FEISHU_ALLOWED_TENANT_KEYS=tenant_key_from_feishu
+FEISHU_ALLOWED_OPEN_IDS=
+FEISHU_ALLOW_ANY_AUTHENTICATED=false
+```
+
+Choose one access policy: `FEISHU_ALLOWED_OPEN_IDS` for named users, `FEISHU_ALLOWED_TENANT_KEYS` for members of selected organizations, or the explicit `FEISHU_ALLOW_ANY_AUTHENTICATED=true` public-login mode. Pages redirect to the login screen and unauthenticated APIs return `401`; only `/healthz`, login routes and static assets remain public. The signed HttpOnly session stores identity fields only and expires after 12 hours by default. Feishu access tokens are not persisted.
+
+Minimal Caddy configuration:
+
+```caddyfile
+quant.example.com {
+    reverse_proxy 127.0.0.1:8765
+}
 ```
 
 Initialize or update the live paper ledger after market close:

@@ -28,6 +28,7 @@
     <div class="topbar-actions">
       <button class="icon-button" id="update-factors" type="button" title="立即更新新因子" aria-label="立即更新新因子"><i data-lucide="refresh-cw"></i></button>
       <div class="market-state"><span class="status-dot" id="mining-status-dot"></span><span id="mining-status">载入中</span></div>
+      {% if web_login_enabled %}<form class="auth-logout" action="/auth/feishu/logout" method="post"><button class="icon-button" type="submit" title="退出登录" aria-label="退出登录"><i data-lucide="log-out"></i></button></form>{% endif %}
     </div>
   </header>
 

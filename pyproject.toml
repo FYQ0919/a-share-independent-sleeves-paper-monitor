@@ -4,8 +4,8 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "a-share-lgbm-75-25-strategy"
-version = "0.1.0"
-description = "Frozen 75/25 Alpha158-Barra LightGBM research and paper-trading strategy"
+version = "0.2.0"
+description = "Frozen 75/25 Alpha158-Barra LightGBM with a causal volatility-target risk overlay"
 requires-python = ">=3.9"
 dependencies = [
   "akshare>=1.16.0",

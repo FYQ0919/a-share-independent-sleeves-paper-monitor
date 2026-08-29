@@ -1,0 +1,129 @@
+{
+  "generated_at": "2026-08-29T15:55:28.938529+08:00",
+  "status": "historical_candidate_not_deployed",
+  "strategy": "frozen 75/25 LGBM plus causal 60-session volatility target",
+  "parameters": {
+    "window": 60,
+    "min_observations": 30,
+    "target_volatility": 0.22,
+    "minimum_exposure": 0.65,
+    "maximum_exposure": 1.0,
+    "exposure_change_cost_bps": 12.0
+  },
+  "selection_contract": {
+    "parameter_source": "volatility overlay selected on the 2020-2023 research window",
+    "selection_window": [
+      "2020-01-02",
+      "2023-12-31"
+    ],
+    "revealed_diagnostic_window": [
+      "2024-01-01",
+      "2026-08-25"
+    ],
+    "diagnostic_reused_for_other_research": true
+  },
+  "metrics": {
+    "selection_2020_2023": {
+      "base_lgbm": {
+        "start_date": "2020-01-02",
+        "end_date": "2023-12-29",
+        "return_periods": 970,
+        "terminal_value": 1.6134828186999879,
+        "total_return": 0.6134828186999879,
+        "annual_return": 0.1323375039111354,
+        "annual_volatility": 0.28653292821424936,
+        "sharpe_zero_rate": 0.5770152496590212,
+        "max_drawdown": -0.32071453431781527
+      },
+      "volatility_target_lgbm": {
+        "start_date": "2020-01-02",
+        "end_date": "2023-12-29",
+        "return_periods": 970,
+        "terminal_value": 1.5296419195841227,
+        "total_return": 0.5296419195841227,
+        "annual_return": 0.11674825425147617,
+        "annual_volatility": 0.23774847301967783,
+        "sharpe_zero_rate": 0.5836094387637568,
+        "max_drawdown": -0.2332950583421337
+      },
+      "average_exposure": 0.8169383847411256,
+      "exposure_turnover": 8.425692215856085,
+      "overlay_cost": 0.010110830659027303
+    },
+    "revealed_diagnostic_2024_latest": {
+      "base_lgbm": {
+        "start_date": "2024-01-02",
+        "end_date": "2026-08-25",
+        "return_periods": 641,
+        "terminal_value": 4.3759777393159744,
+        "total_return": 3.3759777393159744,
+        "annual_return": 0.7866090357298816,
+        "annual_volatility": 0.37006546933723816,
+        "sharpe_zero_rate": 1.7470187470593086,
+        "max_drawdown": -0.18670089930799738
+      },
+      "volatility_target_lgbm": {
+        "start_date": "2024-01-02",
+        "end_date": "2026-08-25",
+        "return_periods": 641,
+        "terminal_value": 3.3718634836635997,
+        "total_return": 2.3718634836635997,
+        "annual_return": 0.6125921773866347,
+        "annual_volatility": 0.2782854108349149,
+        "sharpe_zero_rate": 1.8540220852919322,
+        "max_drawdown": -0.18016382067249048
+      },
+      "average_exposure": 0.7662181758211576,
+      "exposure_turnover": 4.999018726135141,
+      "overlay_cost": 0.005998822471362169
+    },
+    "full_2020_latest": {
+      "base_lgbm": {
+        "start_date": "2020-01-02",
+        "end_date": "2026-08-25",
+        "return_periods": 1611,
+        "terminal_value": 7.060564897399925,
+        "total_return": 6.060564897399925,
+        "annual_return": 0.35762352600817504,
+        "annual_volatility": 0.322714133167955,
+        "sharpe_zero_rate": 1.1055894039307212,
+        "max_drawdown": -0.32071453431781527
+      },
+      "volatility_target_lgbm": {
+        "start_date": "2020-01-02",
+        "end_date": "2026-08-25",
+        "return_periods": 1611,
+        "terminal_value": 5.157743731726796,
+        "total_return": 4.157743731726796,
+        "annual_return": 0.2925466292399248,
+        "annual_volatility": 0.25491728438452244,
+        "sharpe_zero_rate": 1.1330506874377393,
+        "max_drawdown": -0.25897961573196715
+      },
+      "average_exposure": 0.7967573456860668,
+      "exposure_turnover": 13.424710941991226,
+      "overlay_cost": 0.01610965313038947
+    }
+  },
+  "causality_audit": {
+    "exposure_at_t_uses_returns_through": "T-1",
+    "future_data_used": false,
+    "cash_only": true,
+    "leverage_allowed": false
+  },
+  "production_change": false,
+  "strict_no_lookahead_certified": false,
+  "limitations": [
+    "The 2024-latest diagnostic window has already been revealed and is not a fresh holdout.",
+    "The current Top50 universe is backfilled and has constituent and survivorship bias.",
+    "Current-vintage adjusted prices are not strict point-in-time prices.",
+    "The overlay is evaluated on a stored strategy return stream, not a broker fill replay.",
+    "A new forward paper window is required before production promotion."
+  ],
+  "artifacts": {
+    "audit_json": "data/lgbm_high_sharpe_overlay_v1.json",
+    "curve_csv": "reports/lgbm_high_sharpe_overlay_v1_curves.csv",
+    "report": "reports/lgbm_high_sharpe_overlay_v1.md",
+    "chart": "reports/lgbm_high_sharpe_overlay_v1.svg"
+  }
+}

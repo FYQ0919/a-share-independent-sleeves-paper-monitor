@@ -89,14 +89,32 @@ def wait_for_token(device_code: str) -> str:
     raise RuntimeError("GitHub device authorization timed out")
 
 
+def request_device_code() -> str:
+    response = request_with_retry(
+        "POST",
+        "https://github.com/login/device/code",
+        headers={"Accept": "application/json", "User-Agent": "GitHub CLI"},
+        data={"client_id": CLIENT_ID, "scope": "repo"},
+    )
+    response.raise_for_status()
+    result = response.json()
+    print(
+        "GITHUB_DEVICE_AUTH "
+        f"{result['verification_uri']} CODE {result['user_code']}",
+        flush=True,
+    )
+    return str(result["device_code"])
+
+
 def main() -> None:
     parser = argparse.ArgumentParser()
-    parser.add_argument("--device-code", required=True)
+    parser.add_argument("--device-code")
     parser.add_argument("--release", type=Path, required=True)
     parser.add_argument("--repo", required=True)
     args = parser.parse_args()
 
-    token = wait_for_token(args.device_code)
+    device_code = args.device_code or request_device_code()
+    token = wait_for_token(device_code)
     headers = {
         "Authorization": f"Bearer {token}",
         "Accept": "application/vnd.github+json",

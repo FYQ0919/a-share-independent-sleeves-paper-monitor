@@ -34,6 +34,27 @@
 .login-copy p { margin: 0; color: #5c6c64; line-height: 1.75; }
 .login-button { width: 100%; min-height: 48px; justify-content: center; }
 
+.account-form { display: grid; gap: 16px; }
+.account-form label { display: grid; gap: 7px; color: #33463d; font-size: 13px; font-weight: 600; }
+.account-form input {
+  width: 100%;
+  min-height: 44px;
+  border: 1px solid #cbd6d0;
+  border-radius: 5px;
+  background: #fbfdfc;
+  color: #14251d;
+  padding: 10px 12px;
+  font: inherit;
+  letter-spacing: 0;
+}
+.account-form input:focus { outline: 2px solid rgba(29, 122, 82, 0.22); border-color: #1d7a52; }
+.account-form small { color: #738078; font-size: 11px; font-weight: 400; line-height: 1.5; }
+.login-error { margin: -12px 0 18px; border-left: 3px solid #b6483d; background: #fff3f1; padding: 11px 13px; color: #77342e; font-size: 13px; }
+.account-switch { margin: 20px 0 0; text-align: center; color: #66756d; font-size: 13px; }
+.account-switch a { color: #176a47; font-weight: 700; text-decoration: none; }
+.account-switch a:hover { text-decoration: underline; }
+.register-panel { margin: 28px 0; }
+
 .login-config-error {
   display: grid;
   gap: 8px;

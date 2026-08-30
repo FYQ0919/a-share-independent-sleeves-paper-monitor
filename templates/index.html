@@ -31,7 +31,7 @@
     <div class="topbar-actions">
       <div class="market-state" id="market-state"><span class="status-dot"></span><span>准备中</span></div>
       <button class="icon-button" id="refresh-button" title="刷新数据" aria-label="刷新数据"><i data-lucide="refresh-cw"></i></button>
-      {% if web_login_enabled %}<form class="auth-logout" action="/auth/feishu/logout" method="post"><button class="icon-button" type="submit" title="退出登录" aria-label="退出登录"><i data-lucide="log-out"></i></button></form>{% endif %}
+      {% if web_login_enabled %}<form class="auth-logout" action="{{ auth_logout_path }}" method="post"><button class="icon-button" type="submit" title="退出登录" aria-label="退出登录"><i data-lucide="log-out"></i></button></form>{% endif %}
     </div>
   </header>
 

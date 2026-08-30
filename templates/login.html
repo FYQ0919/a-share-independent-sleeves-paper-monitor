@@ -4,35 +4,34 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="color-scheme" content="light">
-  <title>飞书登录｜量研台</title>
+  <title>账号登录｜量研台</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600&family=Noto+Sans+SC:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="/static/styles.css">
-  <link rel="stylesheet" href="/static/login.css?v=20260830-v1">
+  <link rel="stylesheet" href="/static/login.css?v=20260830-v2">
   <script src="https://unpkg.com/lucide@0.468.0/dist/umd/lucide.min.js" defer></script>
-  <script src="/static/login.js?v=20260830-v1" defer></script>
+  <script src="/static/login.js?v=20260830-v2" defer></script>
 </head>
 <body class="login-page">
   <main class="login-shell">
     <section class="login-panel" aria-labelledby="login-title">
       <div class="login-brand"><span class="brand-mark" aria-hidden="true">Q</span><span>量研台</span></div>
       <div class="login-copy">
-        <span class="eyebrow">PRIVATE MONITOR</span>
-        <h1 id="login-title">查看模拟盘</h1>
-        <p>使用获准的飞书账号登录后，可查看策略净值、持仓、订单和对冲状态。</p>
+        <span class="eyebrow">ACCOUNT ACCESS</span>
+        <h1 id="login-title">登录监控台</h1>
+        <p>登录后查看策略净值、持仓、订单和对冲状态。</p>
       </div>
-      {% if auth_ready %}
-      <a class="button primary login-button" href="/auth/feishu/start?next={{ next_path | urlencode }}">
-        <i data-lucide="log-in"></i><span>使用飞书登录</span>
-      </a>
-      {% else %}
-      <div class="login-config-error" role="alert">
-        <strong>登录服务尚未配置完成</strong>
-        {% for error in auth_errors %}<span>{{ error }}</span>{% endfor %}
-      </div>
-      {% endif %}
-      <p class="login-footnote"><i data-lucide="shield-check"></i><span>仅保存签名后的登录标识，不保存飞书访问令牌</span></p>
+      {% if error %}<div class="login-error" role="alert">{{ error }}</div>{% endif %}
+      <form class="account-form" action="/auth/login" method="post">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+        <input type="hidden" name="next" value="{{ next_path }}">
+        <label><span>用户名</span><input name="username" type="text" autocomplete="username" maxlength="32" required autofocus></label>
+        <label><span>密码</span><input name="password" type="password" autocomplete="current-password" maxlength="128" required></label>
+        <button class="button primary login-button" type="submit"><i data-lucide="log-in"></i><span>登录</span></button>
+      </form>
+      {% if registration_enabled %}<p class="account-switch">还没有账号？<a href="/auth/register">创建账号</a></p>{% endif %}
+      <p class="login-footnote"><i data-lucide="shield-check"></i><span>密码仅以加盐哈希保存，登录态默认12小时</span></p>
     </section>
   </main>
 </body>

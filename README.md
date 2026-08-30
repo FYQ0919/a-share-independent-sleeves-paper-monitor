@@ -62,6 +62,7 @@ app/paper_account.py      next-open stock execution, lots, cash and cost ledger
 app/index_hedge.py        causal CSI300 MA120 hedge ledger
 app/sleeve_monitor.py     independent-sleeve aggregation without capital transfer
 app/paper_curve.py        forward-only CSV/JSON/PNG equity export
+app/local_auth.py         local accounts, roles, lockout and registration
 app/web_auth.py           Feishu OAuth login and authorization guard
 app/main.py               FastAPI dashboard and read-only monitor API
 templates/paper_monitor.html
@@ -85,39 +86,48 @@ Open:
 http://127.0.0.1:8765/paper-monitor
 ```
 
-## Feishu login for shared access
+## Public deployment with local accounts
 
-Use an HTTPS domain and a reverse proxy; keep Uvicorn bound to `127.0.0.1` instead of exposing port `8765` directly. Create a Feishu enterprise self-built web application and register this exact redirect URL:
+The site can use its own username/password accounts without Feishu. Accounts live in `data/auth.db`; passwords are stored as per-user salted Scrypt hashes. With an invite configured, the first valid invited registration becomes administrator. Open registration never grants administrator implicitly. Later self-registered accounts are read-only: they can inspect the monitor and research results, but cannot run analysis, backtests, factor updates or notification pushes.
 
-```text
-https://quant.example.com/auth/feishu/callback
-```
-
-Configure only the server-side `.env`; never commit the application secret or session key:
+Set the server-side `.env`:
 
 ```env
-FEISHU_WEB_LOGIN_ENABLED=true
-FEISHU_APP_ID=cli_xxxxxxxxxx
-FEISHU_APP_SECRET=server-local-secret
-FEISHU_REDIRECT_URI=https://quant.example.com/auth/feishu/callback
+DOMAIN=quant.example.com
+WEB_AUTH_PROVIDER=local
+LOCAL_REGISTRATION_ENABLED=true
+
+# Recommended for a private audience. Leave empty for open registration.
+LOCAL_REGISTRATION_INVITE_CODE=a-long-random-invite-code
 SESSION_SECRET=at-least-32-random-characters
 SESSION_COOKIE_SECURE=true
 
-# Recommended: allow a tenant or selected comma-separated open_id values.
-FEISHU_ALLOWED_TENANT_KEYS=tenant_key_from_feishu
-FEISHU_ALLOWED_OPEN_IDS=
-FEISHU_ALLOW_ANY_AUTHENTICATED=false
+DATA_MODE=live
+INDEPENDENT_SLEEVES_ENABLED=true
 ```
 
-Choose one access policy: `FEISHU_ALLOWED_OPEN_IDS` for named users, `FEISHU_ALLOWED_TENANT_KEYS` for members of selected organizations, or the explicit `FEISHU_ALLOW_ANY_AUTHENTICATED=true` public-login mode. Pages redirect to the login screen and unauthenticated APIs return `401`; only `/healthz`, login routes and static assets remain public. The signed HttpOnly session stores identity fields only and expires after 12 hours by default. Feishu access tokens are not persisted.
+Do not commit `.env`, the invite code or the session secret. To disable self-registration and create accounts from the server instead:
 
-Minimal Caddy configuration:
-
-```caddyfile
-quant.example.com {
-    reverse_proxy 127.0.0.1:8765
-}
+```bash
+python scripts/manage_users.py create --username admin --display-name Admin --admin
+python scripts/manage_users.py list
+python scripts/manage_users.py disable --username user1
+python scripts/manage_users.py reset-password --username user1
 ```
+
+Point the domain A record to a Linux server, allow inbound `22`, `80` and `443`, and do not expose `8765`. Then run:
+
+```bash
+git clone https://github.com/FYQ0919/a-share-independent-sleeves-paper-monitor.git
+cd a-share-independent-sleeves-paper-monitor
+cp .env.example .env
+# edit .env before starting
+docker compose up -d --build
+docker compose ps
+docker compose logs -f app caddy
+```
+
+With an invite configured, open `https://quant.example.com/auth/register` to create the first administrator. For open registration, create an administrator with `manage_users.py create --admin` before exposing the site. Caddy automatically obtains and renews HTTPS certificates. FastAPI is reachable only through the internal Docker network; account data, paper state, reports and certificates persist across rebuilds. Validate with `curl https://quant.example.com/healthz`: it should report `web_auth_provider=local` and `web_login_ready=true`.
 
 Initialize or update the live paper ledger after market close:
 

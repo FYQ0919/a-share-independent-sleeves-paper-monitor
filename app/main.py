@@ -11,6 +11,7 @@ from pydantic import BaseModel, Field
 from app.backtest_service import BacktestService
 from app.adaptive_portfolio import AdaptivePortfolioService
 from app.config import BASE_DIR, settings
+from app.local_auth import LocalWebAuth
 from app.pipeline import ResearchPipeline
 from app.paper_account import LgbmPaperAccountService
 from app.scheduler import build_scheduler
@@ -97,7 +98,12 @@ async def lifespan(_: FastAPI):
 app = FastAPI(title="量研台", version="0.1.0", lifespan=lifespan)
 app.mount("/static", StaticFiles(directory=BASE_DIR / "static"), name="static")
 templates = Jinja2Templates(directory=BASE_DIR / "templates")
-web_auth = FeishuWebAuth(settings, templates)
+if settings.web_auth_provider == "local":
+    web_auth = LocalWebAuth(settings, templates)
+elif settings.web_auth_provider in {"disabled", "feishu"}:
+    web_auth = FeishuWebAuth(settings, templates)
+else:
+    raise RuntimeError("WEB_AUTH_PROVIDER 仅支持 disabled、local 或 feishu")
 web_auth.install(app)
 
 
@@ -130,7 +136,10 @@ async def index(request: Request):
     return templates.TemplateResponse(
         request=request,
         name="index.html",
-        context={"web_login_enabled": settings.feishu_web_login_enabled},
+        context={
+            "web_login_enabled": web_auth.enabled,
+            "auth_logout_path": web_auth.logout_path,
+        },
     )
 
 
@@ -139,7 +148,10 @@ async def backtest_page(request: Request):
     return templates.TemplateResponse(
         request=request,
         name="backtest.html",
-        context={"web_login_enabled": settings.feishu_web_login_enabled},
+        context={
+            "web_login_enabled": web_auth.enabled,
+            "auth_logout_path": web_auth.logout_path,
+        },
     )
 
 
@@ -148,7 +160,10 @@ async def factor_mining_page(request: Request):
     return templates.TemplateResponse(
         request=request,
         name="factor_mining.html",
-        context={"web_login_enabled": settings.feishu_web_login_enabled},
+        context={
+            "web_login_enabled": web_auth.enabled,
+            "auth_logout_path": web_auth.logout_path,
+        },
     )
 
 
@@ -157,7 +172,10 @@ async def paper_monitor_page(request: Request):
     return templates.TemplateResponse(
         request=request,
         name="paper_monitor.html",
-        context={"web_login_enabled": settings.feishu_web_login_enabled},
+        context={
+            "web_login_enabled": web_auth.enabled,
+            "auth_logout_path": web_auth.logout_path,
+        },
     )
 
 
@@ -168,6 +186,7 @@ async def health():
         "version": app.version,
         "has_data": storage.latest() is not None,
         "web_login_enabled": web_auth.enabled,
+        "web_auth_provider": settings.web_auth_provider,
         "web_login_ready": web_auth.status.ready,
     }
 

@@ -44,6 +44,21 @@ def _lgbm_model_dir() -> Path:
     return BASE_DIR / "data" / "models" / version
 
 
+def _auth_database_path() -> Path:
+    configured = os.getenv("AUTH_DATABASE_PATH", "").strip()
+    if not configured:
+        return BASE_DIR / "data" / "auth.db"
+    path = Path(configured)
+    return path if path.is_absolute() else BASE_DIR / path
+
+
+def _web_auth_provider() -> str:
+    configured = os.getenv("WEB_AUTH_PROVIDER", "").strip().lower()
+    if configured:
+        return configured
+    return "feishu" if _bool("FEISHU_WEB_LOGIN_ENABLED", False) else "disabled"
+
+
 @dataclass(frozen=True)
 class Settings:
     data_mode: str = os.getenv("DATA_MODE", "demo").lower()
@@ -90,6 +105,15 @@ class Settings:
     feishu_webhook_url: str = os.getenv("FEISHU_WEBHOOK_URL", "")
     wecom_webhook_url: str = os.getenv("WECOM_WEBHOOK_URL", "")
     generic_webhook_url: str = os.getenv("GENERIC_WEBHOOK_URL", "")
+    web_auth_provider: str = field(default_factory=_web_auth_provider)
+    local_registration_enabled: bool = _bool("LOCAL_REGISTRATION_ENABLED", False)
+    local_registration_invite_code: str = os.getenv(
+        "LOCAL_REGISTRATION_INVITE_CODE", ""
+    ).strip()
+    auth_password_min_length: int = _int("AUTH_PASSWORD_MIN_LENGTH", 10)
+    auth_lockout_attempts: int = _int("AUTH_LOCKOUT_ATTEMPTS", 5)
+    auth_lockout_minutes: int = _int("AUTH_LOCKOUT_MINUTES", 15)
+    auth_database_path: Path = field(default_factory=_auth_database_path)
     feishu_web_login_enabled: bool = _bool("FEISHU_WEB_LOGIN_ENABLED", False)
     feishu_app_id: str = os.getenv("FEISHU_APP_ID", "").strip()
     feishu_app_secret: str = os.getenv("FEISHU_APP_SECRET", "").strip()

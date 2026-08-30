@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light">
+  <title>创建账号｜量研台</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600&family=Noto+Sans+SC:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/static/styles.css">
+  <link rel="stylesheet" href="/static/login.css?v=20260830-v2">
+  <script src="https://unpkg.com/lucide@0.468.0/dist/umd/lucide.min.js" defer></script>
+  <script src="/static/login.js?v=20260830-v2" defer></script>
+</head>
+<body class="login-page">
+  <main class="login-shell">
+    <section class="login-panel register-panel" aria-labelledby="register-title">
+      <div class="login-brand"><span class="brand-mark" aria-hidden="true">Q</span><span>量研台</span></div>
+      <div class="login-copy">
+        <span class="eyebrow">NEW ACCOUNT</span>
+        <h1 id="register-title">创建账号</h1>
+        <p>账号创建后会直接进入模拟盘监控台。</p>
+      </div>
+      {% if error %}<div class="login-error" role="alert">{{ error }}</div>{% endif %}
+      <form class="account-form" action="/auth/register" method="post">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+        <label><span>用户名</span><input name="username" type="text" autocomplete="username" minlength="3" maxlength="32" pattern="[A-Za-z0-9][A-Za-z0-9_.-]{2,31}" required><small>3-32位字母、数字、点、下划线或连字符</small></label>
+        <label><span>显示名称</span><input name="display_name" type="text" autocomplete="name" maxlength="40" required></label>
+        {% if invite_required %}<label><span>邀请码</span><input name="invite_code" type="password" autocomplete="off" required></label>{% endif %}
+        <label><span>密码</span><input name="password" type="password" autocomplete="new-password" minlength="{{ password_min_length }}" maxlength="128" required><small>至少{{ password_min_length }}个字符，请勿复用其他网站密码</small></label>
+        <label><span>确认密码</span><input name="password_confirm" type="password" autocomplete="new-password" minlength="{{ password_min_length }}" maxlength="128" required></label>
+        <button class="button primary login-button" type="submit"><i data-lucide="user-plus"></i><span>创建并登录</span></button>
+      </form>
+      <p class="account-switch">已有账号？<a href="/auth/login">返回登录</a></p>
+      <p class="login-footnote"><i data-lucide="shield-check"></i><span>连续登录失败会触发临时锁定</span></p>
+    </section>
+  </main>
+</body>
+</html>

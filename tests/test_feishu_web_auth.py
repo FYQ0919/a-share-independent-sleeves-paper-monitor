@@ -12,6 +12,7 @@ from app.web_auth import FeishuWebAuth, _safe_next
 def auth_settings(**overrides):
     values = {
         "feishu_web_login_enabled": True,
+        "web_auth_provider": "feishu",
         "feishu_app_id": "cli_test",
         "feishu_app_secret": "test-secret",
         "feishu_redirect_uri": "https://quant.example.com/auth/feishu/callback",

@@ -155,7 +155,8 @@ class FeishuWebAuth:
     def __init__(self, settings, templates: Jinja2Templates):
         self.settings = settings
         self.templates = templates
-        self.enabled = bool(settings.feishu_web_login_enabled)
+        self.enabled = settings.web_auth_provider == "feishu"
+        self.logout_path = "/auth/feishu/logout"
         self.signer = SignedCookie(settings.session_secret or secrets.token_urlsafe(32))
         self.oauth_client = FeishuOAuthClient(
             settings.feishu_app_id,
@@ -232,7 +233,7 @@ class FeishuWebAuth:
             status = auth.status
             return auth.templates.TemplateResponse(
                 request=request,
-                name="login.html",
+                name="feishu_login.html",
                 context={
                     "next_path": _safe_next(next),
                     "auth_ready": status.ready,

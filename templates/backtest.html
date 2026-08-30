@@ -25,7 +25,7 @@
       <a class="active" href="/backtest"><i data-lucide="chart-no-axes-combined"></i><span>策略回测</span></a>
       <a href="/factor-mining"><i data-lucide="pickaxe"></i><span>因子挖掘</span></a>
     </nav>
-    <div class="topbar-actions"><div class="market-state"><span class="status-dot"></span><span id="backtest-status">待运行</span></div>{% if web_login_enabled %}<form class="auth-logout" action="/auth/feishu/logout" method="post"><button class="icon-button" type="submit" title="退出登录" aria-label="退出登录"><i data-lucide="log-out"></i></button></form>{% endif %}</div>
+    <div class="topbar-actions"><div class="market-state"><span class="status-dot"></span><span id="backtest-status">待运行</span></div>{% if web_login_enabled %}<form class="auth-logout" action="{{ auth_logout_path }}" method="post"><button class="icon-button" type="submit" title="退出登录" aria-label="退出登录"><i data-lucide="log-out"></i></button></form>{% endif %}</div>
   </header>
 
   <main>

@@ -33,7 +33,7 @@ class Response:
 
 def request_with_retry(method: str, url: str, **kwargs) -> Response:
     last_error = None
-    opener = urllib.request.build_opener(urllib.request.ProxyHandler({}))
+    opener = urllib.request.build_opener()
     for attempt in range(3):
         try:
             headers = dict(kwargs.get("headers", {}))
@@ -183,16 +183,11 @@ def main() -> None:
             check=True,
         )
     environment = os.environ.copy()
-    for name in ("HTTP_PROXY", "HTTPS_PROXY", "ALL_PROXY", "http_proxy", "https_proxy", "all_proxy"):
-        environment.pop(name, None)
-    environment["NO_PROXY"] = "github.com,api.github.com"
     subprocess.run(
         [
             "git",
             "-c",
             "http.sslBackend=openssl",
-            "-c",
-            "http.proxy=",
             "push",
             "-u",
             "origin",

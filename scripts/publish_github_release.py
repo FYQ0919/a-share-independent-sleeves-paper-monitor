@@ -142,7 +142,7 @@ def main() -> None:
             "auto_init": False,
         },
     )
-    if create_response.status_code == 422:
+    if create_response.status_code in {403, 422}:
         existing = request_with_retry(
             "GET", f"https://api.github.com/repos/{login}/{args.repo}", headers=headers
         )

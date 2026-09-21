@@ -25,6 +25,20 @@
 
 上述结果使用当前冻结 Top50 历史回填和当前版本复权数据，存在成分股、存续和 point-in-time 偏差。正式判断需要至少 126 个交易日的未改参数前向模拟。
 
+## Historical dynamic Top50 research
+
+The repository also includes a two-year research backtest that rebuilds the Top50 universe on every 10-session signal-grid date using the full observed market cross-section available on that date. The model is then ranked only inside that period's historical Top50; it does not backfill the current Top50 into earlier dates.
+
+Run it after preparing the local historical cache at `data/cache/market_history_2y/`:
+
+```powershell
+.\.venv\Scripts\python.exe scripts/backtest_lgbm_dynamic_top50_2y.py
+```
+
+The generated research artifacts are checked in under `data/dynamic_top50_lgbm_2024_2026.json` and `reports/dynamic_top50_lgbm_2024_2026_*`. The published run selected 49 complete formal Top50 periods, with an observed full-market input of 5,516 available codes. Its dynamic strategy result was 89.89% total return, 38.13% annualized return, 1.154 Sharpe and -31.61% maximum drawdown from 2024-09-21 through 2026-09-18, versus 36.96% total return for the frozen-current-Top50 comparison.
+
+This is labeled `dynamic_top50_historical_observed_universe`, not `strict_point_in_time_full_market`: the source snapshot does not reconstruct historical delisted stocks, as-of adjustment vintages, or every historical daily tradability state. It is research evidence rather than a production-return guarantee.
+
 ## Strategy contract
 
 趋势专家普通环境采用：
